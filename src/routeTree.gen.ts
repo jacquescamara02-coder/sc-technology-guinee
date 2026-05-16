@@ -32,6 +32,7 @@ import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
+import { Route as AdminProductsProductIdFacebookPreviewRouteImport } from './routes/admin.products.$productId.facebook-preview'
 import { Route as AdminProductsProductIdEditRouteImport } from './routes/admin.products.$productId.edit'
 
 const SearchRoute = SearchRouteImport.update({
@@ -150,6 +151,12 @@ const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AdminProductsRoute,
 } as any)
+const AdminProductsProductIdFacebookPreviewRoute =
+  AdminProductsProductIdFacebookPreviewRouteImport.update({
+    id: '/$productId/facebook-preview',
+    path: '/$productId/facebook-preview',
+    getParentRoute: () => AdminProductsRoute,
+  } as any)
 const AdminProductsProductIdEditRoute =
   AdminProductsProductIdEditRouteImport.update({
     id: '/$productId/edit',
@@ -182,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -207,6 +215,7 @@ export interface FileRoutesByTo {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -234,6 +243,7 @@ export interface FileRoutesById {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   id:
     | '__root__'
     | '/'
@@ -313,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -493,6 +506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsNewRouteImport
       parentRoute: typeof AdminProductsRoute
     }
+    '/admin/products/$productId/facebook-preview': {
+      id: '/admin/products/$productId/facebook-preview'
+      path: '/$productId/facebook-preview'
+      fullPath: '/admin/products/$productId/facebook-preview'
+      preLoaderRoute: typeof AdminProductsProductIdFacebookPreviewRouteImport
+      parentRoute: typeof AdminProductsRoute
+    }
     '/admin/products/$productId/edit': {
       id: '/admin/products/$productId/edit'
       path: '/$productId/edit'
@@ -506,11 +526,14 @@ declare module '@tanstack/react-router' {
 interface AdminProductsRouteChildren {
   AdminProductsNewRoute: typeof AdminProductsNewRoute
   AdminProductsProductIdEditRoute: typeof AdminProductsProductIdEditRoute
+  AdminProductsProductIdFacebookPreviewRoute: typeof AdminProductsProductIdFacebookPreviewRoute
 }
 
 const AdminProductsRouteChildren: AdminProductsRouteChildren = {
   AdminProductsNewRoute: AdminProductsNewRoute,
   AdminProductsProductIdEditRoute: AdminProductsProductIdEditRoute,
+  AdminProductsProductIdFacebookPreviewRoute:
+    AdminProductsProductIdFacebookPreviewRoute,
 }
 
 const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
