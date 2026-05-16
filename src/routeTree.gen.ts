@@ -22,6 +22,7 @@ import { Route as ProductProductIdRouteImport } from './routes/product.$productI
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as CheckoutPaymentRouteImport } from './routes/checkout_.payment'
 import { Route as CategoriesCategoryIdRouteImport } from './routes/categories.$categoryId'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 
 const SearchRoute = SearchRouteImport.update({
@@ -89,6 +90,11 @@ const CategoriesCategoryIdRoute = CategoriesCategoryIdRouteImport.update({
   path: '/$categoryId',
   getParentRoute: () => CategoriesRoute,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesCategoryIdSubCategoryIdRoute =
   CategoriesCategoryIdSubCategoryIdRouteImport.update({
     id: '/$subCategoryId',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout/payment': typeof CheckoutPaymentRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout/payment': typeof CheckoutPaymentRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout_/payment': typeof CheckoutPaymentRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout/payment'
     | '/orders/$orderId'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout/payment'
     | '/orders/$orderId'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout_/payment'
     | '/orders/$orderId'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
   SearchRoute: typeof SearchRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   CheckoutPaymentRoute: typeof CheckoutPaymentRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
 }
@@ -303,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoryIdRouteImport
       parentRoute: typeof CategoriesRoute
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories/$categoryId/$subCategoryId': {
       id: '/categories/$categoryId/$subCategoryId'
       path: '/$subCategoryId'
@@ -358,9 +378,20 @@ const rootRouteChildren: RootRouteChildren = {
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
   SearchRoute: SearchRoute,
+  AdminLoginRoute: AdminLoginRoute,
   CheckoutPaymentRoute: CheckoutPaymentRoute,
   ProductProductIdRoute: ProductProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
