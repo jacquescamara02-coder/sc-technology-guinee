@@ -157,6 +157,7 @@ function AdminLayout() {
           <Outlet />
         </main>
       </div>
+      <Toaster position="top-right" richColors closeButton />
     </div>
   );
 }
