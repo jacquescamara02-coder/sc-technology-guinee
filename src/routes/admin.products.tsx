@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil } from "lucide-react";
+import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook } from "lucide-react";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
 
