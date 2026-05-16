@@ -6,6 +6,7 @@ import {
   generateProductId,
   type AdminProduct,
 } from "@/lib/admin-store";
+import { simulateFacebookPublish } from "@/lib/facebook";
 
 interface Props {
   initial?: AdminProduct;
