@@ -47,7 +47,7 @@ function Index() {
       <section>
         <SectionHeader
           title="Produits en vedette"
-          action={{ label: "Voir tout", onClick: () => navigate({ to: "/categories" }) }}
+          action={{ label: "Voir tout", onClick: () => navigate({ to: "/vedette" }) }}
         />
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
           {featured.map((p) => (
@@ -60,7 +60,7 @@ function Index() {
       <section>
         <SectionHeader
           title="Nouveautés"
-          action={{ label: "Voir tout", onClick: () => navigate({ to: "/categories" }) }}
+          action={{ label: "Voir tout", onClick: () => navigate({ to: "/nouveautes" }) }}
         />
         <div className="grid grid-cols-2 gap-3">
           {newArrivals.map((p) => (
