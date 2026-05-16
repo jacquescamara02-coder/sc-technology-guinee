@@ -41,6 +41,8 @@ function ProfilePage() {
         </div>
       </div>
 
+      <ThemePicker />
+
       {groups.map((g) => (
         <section key={g.title}>
           <h2 className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{g.title}</h2>
