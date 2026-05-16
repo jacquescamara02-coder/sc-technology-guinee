@@ -16,6 +16,18 @@ export interface AdminProduct {
   images: string[]; // data URLs or gradient strings
   active: boolean;
   publishFacebook: boolean;
+  facebookPostedAt?: string;
+  facebookStatus?: "success" | "failed" | "pending";
+}
+
+export interface FacebookPost {
+  id: string;
+  productId: string;
+  productName: string;
+  productImage: string;
+  caption: string;
+  date: string;
+  status: "success" | "failed" | "pending";
 }
 
 export interface AdminCategory {
