@@ -352,3 +352,99 @@ export const newArrivals = [...productsAll]
 
 export const formatGNF = (n: number) =>
   new Intl.NumberFormat("fr-FR").format(n) + " GNF";
+
+export const getProduct = (id: string) => productsAll.find((p) => p.id === id);
+
+export const relatedProducts = (p: Product, limit = 8) =>
+  productsAll
+    .filter(
+      (x) =>
+        x.id !== p.id &&
+        x.category === p.category &&
+        (x.subcategory === p.subcategory || x.brand === p.brand),
+    )
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, limit);
+
+// Generate 4 image variants (gradients) per product for the gallery
+export const productImages = (p: Product): string[] => {
+  const def = catDefs.find((c) => c.id === p.category);
+  const baseHue = def?.hue ?? 220;
+  const seed = p.id.length;
+  return [0, 25, -20, 60].map((off, i) =>
+    img(baseHue + off + ((seed + i * 13) % 30) - 15),
+  );
+};
+
+export interface SpecRow {
+  label: string;
+  value: string;
+}
+
+export const productSpecs = (p: Product): SpecRow[] => {
+  const parts = p.specs.split("•").map((s) => s.trim()).filter(Boolean);
+  const rows: SpecRow[] = [
+    { label: "Marque", value: p.brand },
+    { label: "Référence", value: p.id.toUpperCase() },
+  ];
+  // Heuristic mapping based on category
+  const labelsByCat: Record<string, string[]> = {
+    laptops: ["Processeur / GPU", "Mémoire RAM", "Stockage"],
+    desktops: ["Configuration", "Mémoire RAM", "Stockage"],
+    ecrans: ["Taille / Résolution", "Taux de rafraîchissement", "Dalle"],
+    imprimantes: ["Vitesse", "Connectivité", "Fonctions"],
+    composants: ["Caractéristique 1", "Caractéristique 2", "Caractéristique 3"],
+    reseaux: ["Standard", "Ports / Antennes", "Couverture"],
+    accessoires: ["Caractéristique 1", "Caractéristique 2", "Caractéristique 3"],
+    telephones: ["Écran", "Mémoire", "Connectivité"],
+  };
+  const labels = labelsByCat[p.category] ?? ["Spécification 1", "Spécification 2", "Spécification 3"];
+  parts.forEach((val, i) => rows.push({ label: labels[i] ?? `Détail ${i + 1}`, value: val }));
+  rows.push({ label: "Garantie", value: "12 mois constructeur" });
+  rows.push({ label: "Disponibilité", value: p.stock > 0 ? `${p.stock} en stock` : "Rupture de stock" });
+  return rows;
+};
+
+export interface Review {
+  id: string;
+  author: string;
+  rating: number; // 1..5
+  date: string;
+  comment: string;
+}
+
+const reviewAuthors = ["Mamadou D.", "Fatoumata B.", "Ibrahima S.", "Aïssatou K.", "Ousmane C.", "Mariama T.", "Sékou B.", "Hadja D."];
+const reviewComments = [
+  "Excellent produit, livraison rapide à Conakry. Je recommande !",
+  "Très bonne qualité, conforme à la description.",
+  "Bon rapport qualité-prix. Service client réactif.",
+  "Produit reçu en parfait état, emballage soigné.",
+  "Performances au rendez-vous, je suis satisfait de mon achat.",
+  "Livraison à Labé en 3 jours, parfait.",
+  "Conforme à mes attentes, je rachèterai.",
+];
+
+export const productReviews = (p: Product): Review[] => {
+  const seed = p.id.length + p.popularity;
+  const n = 3 + (seed % 4);
+  return Array.from({ length: n }, (_, i) => {
+    const idx = (seed + i * 7) % reviewAuthors.length;
+    const cIdx = (seed + i * 11) % reviewComments.length;
+    const rating = 3 + ((seed + i * 3) % 3); // 3..5
+    const daysAgo = ((seed + i * 17) % 60) + 1;
+    return {
+      id: `${p.id}-r-${i}`,
+      author: reviewAuthors[idx],
+      rating,
+      date: `Il y a ${daysAgo} j`,
+      comment: reviewComments[cIdx],
+    };
+  });
+};
+
+export const averageRating = (p: Product): { avg: number; count: number } => {
+  const r = productReviews(p);
+  if (!r.length) return { avg: 0, count: 0 };
+  return { avg: r.reduce((a, x) => a + x.rating, 0) / r.length, count: r.length };
+};
+
