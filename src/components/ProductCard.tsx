@@ -1,5 +1,6 @@
 import { ShoppingCart, Check } from "lucide-react";
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import type { Product } from "@/lib/data";
 import { formatGNF } from "@/lib/data";
 import { useCart } from "@/lib/cart-store";
