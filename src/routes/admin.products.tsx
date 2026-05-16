@@ -229,13 +229,24 @@ function ProductsPage() {
                     )}
                   </td>
                   <td className="px-3 py-2 text-right">
-                    <Link
-                      to="/admin/products/$productId/edit"
-                      params={{ productId: p.id }}
-                      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-blue-600 hover:bg-blue-50"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Link>
+                    <div className="inline-flex items-center gap-1">
+                      <Link
+                        to="/admin/products/$productId/facebook-preview"
+                        params={{ productId: p.id }}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-[#1877F2] hover:bg-blue-50"
+                        title="Aperçu Facebook"
+                      >
+                        <Facebook className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        to="/admin/products/$productId/edit"
+                        params={{ productId: p.id }}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-blue-600 hover:bg-blue-50"
+                        title="Modifier"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
