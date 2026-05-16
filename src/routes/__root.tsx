@@ -69,7 +69,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr">
       <head><HeadContent /></head>
       <body>
         {children}
@@ -83,6 +83,19 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = pathname.startsWith("/admin");
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const html = document.documentElement;
+    if (isAdmin) {
+      html.classList.remove("dark");
+      html.style.backgroundColor = "#f8fafc";
+    } else {
+      html.classList.add("dark");
+      html.style.backgroundColor = "";
+    }
+  }, [isAdmin]);
+
   if (isAdmin) {
     return (
       <QueryClientProvider client={queryClient}>
