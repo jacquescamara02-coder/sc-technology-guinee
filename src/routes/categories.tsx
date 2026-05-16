@@ -1,16 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { categories, products } from "@/lib/data";
-import { ProductCard } from "@/components/ProductCard";
-import { useState } from "react";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
+import { categories } from "@/lib/data";
+import { ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/categories")({
-  component: CategoriesPage,
+  component: CategoriesLayout,
 });
 
-function CategoriesPage() {
-  const [active, setActive] = useState<string>("all");
-  const list = active === "all" ? products : products.filter((p) => p.category === active);
+function CategoriesLayout() {
+  const matches = useMatches();
+  const isRoot = matches[matches.length - 1]?.routeId === "/categories";
+  if (!isRoot) return <Outlet />;
+  return <CategoriesIndex />;
+}
 
+function CategoriesIndex() {
   return (
     <div className="space-y-4 px-4 py-4">
       <div>
@@ -18,38 +21,30 @@ function CategoriesPage() {
         <p className="text-sm text-muted-foreground">Parcourez nos produits par catégorie</p>
       </div>
 
-      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
-        <Chip active={active === "all"} onClick={() => setActive("all")} label="Tout" />
-        {categories.map((c) => (
-          <Chip
-            key={c.id}
-            active={active === c.id}
-            onClick={() => setActive(c.id)}
-            label={c.name}
-          />
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        {list.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {categories.map((c) => {
+          const Icon = c.icon;
+          return (
+            <Link
+              key={c.id}
+              to="/categories/$categoryId"
+              params={{ categoryId: c.id }}
+              className="group flex flex-col items-start gap-3 rounded-2xl border border-border bg-card p-4 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-card)]"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-surface-elevated text-primary transition group-hover:bg-[image:var(--gradient-primary)] group-hover:text-primary-foreground">
+                <Icon className="h-6 w-6" strokeWidth={2.25} />
+              </div>
+              <div className="flex-1">
+                <div className="line-clamp-2 text-sm font-semibold text-foreground">{c.name}</div>
+                <div className="mt-0.5 text-[11px] text-muted-foreground">{c.count} produits</div>
+              </div>
+              <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
+                Explorer <ChevronRight className="h-3 w-3" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
-  );
-}
-
-function Chip({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold transition ${
-        active
-          ? "border-primary bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-glow)]"
-          : "border-border bg-card text-muted-foreground hover:text-foreground"
-      }`}
-    >
-      {label}
-    </button>
   );
 }
