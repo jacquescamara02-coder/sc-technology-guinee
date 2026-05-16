@@ -111,7 +111,16 @@ function SettingsPage() {
         </div>
       </Section>
 
-      <Section title="Facebook (à configurer dans le prochain module)">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="h-9 w-9 rounded-lg bg-[#1877F2] text-white flex items-center justify-center">
+            <Facebook className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold">Intégration Facebook</h3>
+            <p className="text-xs text-slate-500">Publiez automatiquement vos produits sur votre page</p>
+          </div>
+        </div>
         <Field label="ID de la page Facebook">
           <input
             value={s.facebookPageId}
@@ -120,7 +129,7 @@ function SettingsPage() {
             className="adm-input"
           />
         </Field>
-        <Field label="Token d'accès">
+        <Field label="Token d'accès (Page Access Token)">
           <input
             type="password"
             value={s.facebookToken}
@@ -129,8 +138,39 @@ function SettingsPage() {
             className="adm-input"
           />
         </Field>
-        <p className="text-xs text-slate-500">La publication automatique sera disponible prochainement.</p>
-      </Section>
+        <div>
+          <button
+            type="button"
+            onClick={testConnection}
+            disabled={testing}
+            className="inline-flex items-center gap-2 text-sm border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium px-3.5 py-2 rounded-lg disabled:opacity-60"
+          >
+            {testing ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+            Tester la connexion
+          </button>
+        </div>
+        <div className="flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+          <div>
+            <p className="text-sm font-medium text-slate-900">Publier automatiquement les nouveaux produits</p>
+            <p className="text-xs text-slate-500">Chaque nouveau produit sera publié sur la page Facebook</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setS({ ...s, facebookAutoPublish: !s.facebookAutoPublish })}
+            className={
+              "relative inline-flex h-6 w-11 items-center rounded-full transition-colors " +
+              (s.facebookAutoPublish ? "bg-blue-600" : "bg-slate-300")
+            }
+          >
+            <span
+              className={
+                "inline-block h-4 w-4 transform rounded-full bg-white transition-transform " +
+                (s.facebookAutoPublish ? "translate-x-6" : "translate-x-1")
+              }
+            />
+          </button>
+        </div>
+      </div>
 
       <div className="flex items-center gap-3">
         <button
