@@ -78,13 +78,13 @@ export function generateOrderId(): string {
   return `CMD-GN-${num}`;
 }
 
-export const STATUS_FLOW: OrderStatus[] = [
+export const STATUS_FLOW = [
   "received",
   "preparing",
   "shipped",
   "delivering",
   "delivered",
-];
+] as const satisfies readonly Exclude<OrderStatus, "cancelled">[];
 
 export const STATUS_LABEL: Record<OrderStatus, string> = {
   received: "Commande reçue",
