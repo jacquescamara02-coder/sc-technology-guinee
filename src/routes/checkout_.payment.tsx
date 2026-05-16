@@ -20,7 +20,7 @@ import {
   type Order,
 } from "@/lib/orders-store";
 
-export const Route = createFileRoute("/checkout/payment")({
+export const Route = createFileRoute("/checkout_/payment")({
   component: PaymentPage,
 });
 
