@@ -114,6 +114,7 @@ function RootComponent() {
   }
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeApplier />
       <SplashScreen />
       <div className="min-h-screen bg-background pb-20">
         <TopHeader />
