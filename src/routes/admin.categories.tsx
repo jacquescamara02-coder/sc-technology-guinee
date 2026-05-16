@@ -64,7 +64,7 @@ function CategoriesPage() {
                   />
                   <IconBtn
                     onClick={() => {
-                      updateCategory(c.id, editingCatName);
+                      updateCategory(c.id, { name: editingCatName });
                       setEditingCat(null);
                     }}
                     color="green"

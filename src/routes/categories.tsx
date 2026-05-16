@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
-import { categories } from "@/lib/data";
+import { useStorefrontCategories } from "@/lib/storefront";
 import { ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/categories")({
@@ -14,6 +14,7 @@ function CategoriesLayout() {
 }
 
 function CategoriesIndex() {
+  const categories = useStorefrontCategories();
   return (
     <div className="space-y-4 px-4 py-4">
       <div>

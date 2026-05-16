@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { products as seedProducts, categories as seedCategories } from "./data";
 
+export type ProductBadge = "Promo" | "Nouveau" | "Top";
+
 export interface AdminProduct {
   id: string;
   name: string;
@@ -9,12 +11,18 @@ export interface AdminProduct {
   category: string;
   subcategory: string;
   price: number;
+  oldPrice?: number;
   stock: number;
   sku: string;
   description: string;
   specs: { key: string; value: string }[];
-  images: string[]; // data URLs or gradient strings
+  images: string[]; // data URLs, http URLs, or gradient strings
   active: boolean;
+  featured?: boolean;
+  isNew?: boolean;
+  badge?: ProductBadge;
+  popularity?: number;
+  createdAt?: number;
   publishFacebook: boolean;
   facebookPostedAt?: string;
   facebookStatus?: "success" | "failed" | "pending";
@@ -33,6 +41,7 @@ export interface FacebookPost {
 export interface AdminCategory {
   id: string;
   name: string;
+  iconKey?: string; // see icon-map.ts
   subcategories: { id: string; name: string }[];
 }
 
@@ -41,15 +50,36 @@ export interface DeliveryFee {
   fee: number;
 }
 
+export interface HeroSlide {
+  id: string;
+  title: string;
+  subtitle: string;
+  cta: string;
+  link?: string; // optional path like /vedette or /categories/laptops
+  image?: string; // data URL or http URL
+  hue?: number; // fallback gradient
+  active: boolean;
+}
+
 export interface AdminSettings {
   storeName: string;
+  appTagline: string;
+  logo?: string; // data URL or http URL (overrides bundled asset)
   contactEmail: string;
   contactPhone: string;
   whatsapp: string;
+  address: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  tiktokUrl: string;
   deliveryFees: DeliveryFee[];
+  freeShippingThreshold: number;
+  vatRate: number; // 0..1
   facebookPageId: string;
   facebookToken: string;
   facebookAutoPublish: boolean;
+  heroAutoplay: boolean;
+  heroSlides: HeroSlide[];
 }
 
 interface AdminAuth {
@@ -95,14 +125,19 @@ interface AdminDataState {
   deleteProduct: (id: string) => void;
   bulkUpdate: (ids: string[], patch: Partial<AdminProduct>) => void;
   bulkDelete: (ids: string[]) => void;
-  addCategory: (name: string) => void;
-  updateCategory: (id: string, name: string) => void;
+  addCategory: (name: string, iconKey?: string) => void;
+  updateCategory: (id: string, patch: Partial<Pick<AdminCategory, "name" | "iconKey">>) => void;
   deleteCategory: (id: string) => void;
   addSubcategory: (catId: string, name: string) => void;
   updateSubcategory: (catId: string, subId: string, name: string) => void;
   deleteSubcategory: (catId: string, subId: string) => void;
   updateSettings: (patch: Partial<AdminSettings>) => void;
+  addHeroSlide: (slide: Omit<HeroSlide, "id">) => void;
+  updateHeroSlide: (id: string, patch: Partial<HeroSlide>) => void;
+  deleteHeroSlide: (id: string) => void;
+  moveHeroSlide: (id: string, dir: "up" | "down") => void;
   recordFacebookPost: (post: FacebookPost) => void;
+  resetAll: () => void;
 }
 
 const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
@@ -112,26 +147,43 @@ const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
   category: p.category,
   subcategory: p.subcategory,
   price: p.price,
+  oldPrice: p.oldPrice,
   stock: p.stock,
   sku: p.id.toUpperCase(),
   description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGY.`,
   specs: p.specs.split("•").map((s, i) => ({ key: `Spécification ${i + 1}`, value: s.trim() })),
   images: [p.image],
   active: true,
+  badge: p.badge,
+  popularity: p.popularity,
+  createdAt: p.createdAt,
   publishFacebook: false,
 }));
 
 const seededCategories: AdminCategory[] = seedCategories.map((c) => ({
   id: c.id,
   name: c.name,
+  iconKey: c.id, // reuse id as default key
   subcategories: c.subcategories.map((s) => ({ id: s.id, name: s.name })),
 }));
 
+const defaultHeroSlides: HeroSlide[] = [
+  { id: "hero-1", title: "Soldes Tech -30%", subtitle: "Sur tous les laptops MacBook & Dell", cta: "Voir l'offre", link: "/vedette", hue: 260, active: true },
+  { id: "hero-2", title: "Nouveautés 2026", subtitle: "Découvrez les derniers écrans LG & Samsung", cta: "Explorer", link: "/nouveautes", hue: 220, active: true },
+  { id: "hero-3", title: "Livraison gratuite", subtitle: "À Conakry pour toute commande +5M GNF", cta: "En savoir plus", link: "/categories", hue: 200, active: true },
+];
+
 const defaultSettings: AdminSettings = {
   storeName: "SC TECHNOLOGY",
+  appTagline: "Matériel informatique en Guinée",
+  logo: undefined,
   contactEmail: "contact@sctechnology.gn",
   contactPhone: "+224 620-21-20-45",
   whatsapp: "+224 620-21-20-45",
+  address: "Conakry, Guinée",
+  facebookUrl: "",
+  instagramUrl: "",
+  tiktokUrl: "",
   deliveryFees: [
     { city: "Conakry", fee: 50_000 },
     { city: "Labé", fee: 150_000 },
@@ -144,9 +196,13 @@ const defaultSettings: AdminSettings = {
     { city: "Boké", fee: 140_000 },
     { city: "Coyah", fee: 80_000 },
   ],
+  freeShippingThreshold: 5_000_000,
+  vatRate: 0.18,
   facebookPageId: "",
   facebookToken: "",
   facebookAutoPublish: false,
+  heroAutoplay: true,
+  heroSlides: defaultHeroSlides,
 };
 
 function slug(s: string) {
@@ -166,7 +222,13 @@ export const useAdminData = create<AdminDataState>()(
       settings: defaultSettings,
       facebookPosts: [],
 
-      addProduct: (p) => set((s) => ({ products: [p, ...s.products] })),
+      addProduct: (p) =>
+        set((s) => ({
+          products: [
+            { ...p, createdAt: p.createdAt ?? Date.now(), popularity: p.popularity ?? 50 },
+            ...s.products,
+          ],
+        })),
       updateProduct: (id, patch) =>
         set((s) => ({
           products: s.products.map((p) => (p.id === id ? { ...p, ...patch } : p)),
@@ -179,12 +241,17 @@ export const useAdminData = create<AdminDataState>()(
       bulkDelete: (ids) =>
         set((s) => ({ products: s.products.filter((p) => !ids.includes(p.id)) })),
 
-      addCategory: (name) =>
+      addCategory: (name, iconKey) =>
         set((s) => ({
-          categories: [...s.categories, { id: slug(name) || `cat-${Date.now()}`, name, subcategories: [] }],
+          categories: [
+            ...s.categories,
+            { id: slug(name) || `cat-${Date.now()}`, name, iconKey, subcategories: [] },
+          ],
         })),
-      updateCategory: (id, name) =>
-        set((s) => ({ categories: s.categories.map((c) => (c.id === id ? { ...c, name } : c)) })),
+      updateCategory: (id, patch) =>
+        set((s) => ({
+          categories: s.categories.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+        })),
       deleteCategory: (id) =>
         set((s) => ({ categories: s.categories.filter((c) => c.id !== id) })),
       addSubcategory: (catId, name) =>
@@ -225,6 +292,43 @@ export const useAdminData = create<AdminDataState>()(
 
       updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
 
+      addHeroSlide: (slide) =>
+        set((s) => ({
+          settings: {
+            ...s.settings,
+            heroSlides: [
+              ...s.settings.heroSlides,
+              { ...slide, id: `hero-${Date.now().toString(36)}` },
+            ],
+          },
+        })),
+      updateHeroSlide: (id, patch) =>
+        set((s) => ({
+          settings: {
+            ...s.settings,
+            heroSlides: s.settings.heroSlides.map((h) =>
+              h.id === id ? { ...h, ...patch } : h,
+            ),
+          },
+        })),
+      deleteHeroSlide: (id) =>
+        set((s) => ({
+          settings: {
+            ...s.settings,
+            heroSlides: s.settings.heroSlides.filter((h) => h.id !== id),
+          },
+        })),
+      moveHeroSlide: (id, dir) =>
+        set((s) => {
+          const arr = [...s.settings.heroSlides];
+          const idx = arr.findIndex((h) => h.id === id);
+          if (idx < 0) return s;
+          const target = dir === "up" ? idx - 1 : idx + 1;
+          if (target < 0 || target >= arr.length) return s;
+          [arr[idx], arr[target]] = [arr[target], arr[idx]];
+          return { settings: { ...s.settings, heroSlides: arr } };
+        }),
+
       recordFacebookPost: (post) =>
         set((s) => {
           const existingIdx = s.facebookPosts.findIndex((p) => p.productId === post.productId);
@@ -244,13 +348,40 @@ export const useAdminData = create<AdminDataState>()(
             ),
           };
         }),
+
+      resetAll: () =>
+        set({
+          products: seededProducts,
+          categories: seededCategories,
+          settings: defaultSettings,
+          facebookPosts: [],
+        }),
     }),
     {
       name: "techshop-admin-data",
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? window.localStorage : (undefined as never),
       ),
-      version: 1,
+      version: 3,
+      migrate: (persisted: unknown, version: number) => {
+        const data = (persisted ?? {}) as Partial<AdminDataState>;
+        if (version < 2) {
+          data.settings = { ...defaultSettings, ...(data.settings ?? {}) };
+        }
+        if (version < 3) {
+          // Ensure new fields exist
+          data.settings = {
+            ...defaultSettings,
+            ...(data.settings ?? {}),
+            heroSlides: data.settings?.heroSlides ?? defaultHeroSlides,
+          };
+          data.categories = (data.categories ?? seededCategories).map((c) => ({
+            iconKey: c.id,
+            ...c,
+          }));
+        }
+        return data as AdminDataState;
+      },
     },
   ),
 );

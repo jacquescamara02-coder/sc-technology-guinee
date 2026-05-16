@@ -1,6 +1,10 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { getCategory, getSubcategory, productsBySub } from "@/lib/data";
+import {
+  useStorefrontCategory,
+  useStorefrontSubcategory,
+  useProductsBySub,
+} from "@/lib/storefront";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductCard } from "@/components/ProductCard";
 import { Search, SlidersHorizontal, X, ArrowUpDown } from "lucide-react";
@@ -9,29 +13,20 @@ import { formatGNF } from "@/lib/data";
 type SortKey = "price-asc" | "price-desc" | "new" | "popular";
 
 export const Route = createFileRoute("/categories/$categoryId/$subCategoryId")({
-  loader: ({ params }) => {
-    const cat = getCategory(params.categoryId);
-    const sub = getSubcategory(params.categoryId, params.subCategoryId);
-    if (!cat || !sub) throw notFound();
-    return { categoryId: cat.id, subCategoryId: sub.id };
-  },
   component: ProductsListPage,
-  notFoundComponent: () => (
-    <div className="px-4 py-10 text-center text-sm text-muted-foreground">Sous-catégorie introuvable.</div>
-  ),
 });
 
 const PAGE_SIZE = 8;
 
 function ProductsListPage() {
-  const { categoryId, subCategoryId } = Route.useLoaderData();
-  const cat = getCategory(categoryId);
-  const sub = getSubcategory(categoryId, subCategoryId);
-  if (!cat || !sub) return null;
-  const all = useMemo(() => productsBySub(cat.id, sub.id), [cat.id, sub.id]);
+  const { categoryId, subCategoryId } = Route.useParams();
+  const cat = useStorefrontCategory(categoryId);
+  const sub = useStorefrontSubcategory(categoryId, subCategoryId);
+  const all = useProductsBySub(categoryId, subCategoryId);
 
   const brands = useMemo(() => Array.from(new Set(all.map((p) => p.brand))).sort(), [all]);
   const priceBounds = useMemo<[number, number]>(() => {
+    if (all.length === 0) return [0, 0];
     const prices = all.map((p) => p.price);
     return [Math.min(...prices), Math.max(...prices)];
   }, [all]);
@@ -49,7 +44,7 @@ function ProductsListPage() {
     let list = all.filter((p) => {
       if (query && !`${p.name} ${p.brand} ${p.specs}`.toLowerCase().includes(query.toLowerCase())) return false;
       if (selectedBrands.length && !selectedBrands.includes(p.brand)) return false;
-      if (p.price > priceMax) return false;
+      if (priceMax > 0 && p.price > priceMax) return false;
       if (inStockOnly && p.stock <= 0) return false;
       return true;
     });
@@ -61,6 +56,14 @@ function ProductsListPage() {
     }
     return list;
   }, [all, query, selectedBrands, priceMax, inStockOnly, sort]);
+
+  if (!cat || !sub) {
+    return (
+      <div className="px-4 py-10 text-center text-sm text-muted-foreground">
+        Sous-catégorie introuvable.
+      </div>
+    );
+  }
 
   const shown = filtered.slice(0, visible);
   const activeFilters = (selectedBrands.length ? 1 : 0) + (priceMax < priceBounds[1] ? 1 : 0) + (inStockOnly ? 1 : 0);
@@ -87,7 +90,6 @@ function ProductsListPage() {
         <p className="text-xs text-muted-foreground">{filtered.length} produit{filtered.length > 1 ? "s" : ""} disponible{filtered.length > 1 ? "s" : ""}</p>
       </div>
 
-      {/* Search */}
       <div className="relative">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
@@ -99,7 +101,6 @@ function ProductsListPage() {
         />
       </div>
 
-      {/* Toolbar */}
       <div className="flex gap-2">
         <button
           onClick={() => setFilterOpen(true)}
@@ -118,7 +119,6 @@ function ProductsListPage() {
         </button>
       </div>
 
-      {/* Grid */}
       {shown.length === 0 ? (
         <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
           Aucun produit ne correspond à vos critères.
@@ -143,7 +143,6 @@ function ProductsListPage() {
         </button>
       )}
 
-      {/* Filter Sheet */}
       {filterOpen && (
         <BottomSheet onClose={() => setFilterOpen(false)} title="Filtres">
           <div className="space-y-5">
@@ -169,25 +168,27 @@ function ProductsListPage() {
               </div>
             </div>
 
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Prix maximum</h3>
-                <span className="text-xs font-semibold text-foreground">{formatGNF(priceMax)}</span>
+            {priceBounds[1] > 0 && (
+              <div>
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Prix maximum</h3>
+                  <span className="text-xs font-semibold text-foreground">{formatGNF(priceMax)}</span>
+                </div>
+                <input
+                  type="range"
+                  min={priceBounds[0]}
+                  max={priceBounds[1]}
+                  step={50_000}
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(Number(e.target.value))}
+                  className="w-full accent-[color:var(--primary)]"
+                />
+                <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                  <span>{formatGNF(priceBounds[0])}</span>
+                  <span>{formatGNF(priceBounds[1])}</span>
+                </div>
               </div>
-              <input
-                type="range"
-                min={priceBounds[0]}
-                max={priceBounds[1]}
-                step={50_000}
-                value={priceMax}
-                onChange={(e) => setPriceMax(Number(e.target.value))}
-                className="w-full accent-[color:var(--primary)]"
-              />
-              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
-                <span>{formatGNF(priceBounds[0])}</span>
-                <span>{formatGNF(priceBounds[1])}</span>
-              </div>
-            </div>
+            )}
 
             <label className="flex items-center justify-between rounded-xl border border-border bg-surface px-3 py-3">
               <span className="text-sm font-medium text-foreground">En stock uniquement</span>
@@ -217,7 +218,6 @@ function ProductsListPage() {
         </BottomSheet>
       )}
 
-      {/* Sort Sheet */}
       {sortOpen && (
         <BottomSheet onClose={() => setSortOpen(false)} title="Trier par">
           <div className="space-y-1.5">

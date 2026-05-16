@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook } from "lucide-react";
+import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook, Star, Sparkles } from "lucide-react";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/admin/products")({
 const PAGE_SIZE = 50;
 
 function ProductsPage() {
-  const { products, categories, bulkUpdate, bulkDelete } = useAdminData();
+  const { products, categories, bulkUpdate, bulkDelete, deleteProduct, updateProduct } = useAdminData();
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState("all");
   const [status, setStatus] = useState<"all" | "active" | "inactive">("all");
@@ -230,6 +230,22 @@ function ProductsPage() {
                   </td>
                   <td className="px-3 py-2 text-right">
                     <div className="inline-flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => updateProduct(p.id, { featured: !p.featured })}
+                        className={`inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-amber-50 ${p.featured ? "text-amber-500" : "text-slate-400"}`}
+                        title={p.featured ? "Retirer des vedettes" : "Mettre en vedette"}
+                      >
+                        <Star className={`h-4 w-4 ${p.featured ? "fill-amber-400" : ""}`} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateProduct(p.id, { isNew: !p.isNew })}
+                        className={`inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-emerald-50 ${p.isNew ? "text-emerald-600" : "text-slate-400"}`}
+                        title={p.isNew ? "Retirer des nouveautés" : "Marquer comme nouveauté"}
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </button>
                       <Link
                         to="/admin/products/$productId/facebook-preview"
                         params={{ productId: p.id }}
@@ -246,6 +262,16 @@ function ProductsPage() {
                       >
                         <Pencil className="h-4 w-4" />
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Supprimer "${p.name}" ?`)) deleteProduct(p.id);
+                        }}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50"
+                        title="Supprimer"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>

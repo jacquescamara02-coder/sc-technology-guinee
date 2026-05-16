@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   Facebook,
+  Images,
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { useAdminAuth } from "@/lib/admin-store";
@@ -29,6 +30,7 @@ const NAV = [
   { to: "/admin/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
   { to: "/admin/products", label: "Produits", icon: Package },
   { to: "/admin/categories", label: "Catégories", icon: FolderTree },
+  { to: "/admin/banners", label: "Bannières", icon: Images },
   { to: "/admin/orders", label: "Commandes", icon: ShoppingBag },
   { to: "/admin/facebook", label: "Facebook", icon: Facebook },
   { to: "/admin/settings", label: "Paramètres", icon: Settings },

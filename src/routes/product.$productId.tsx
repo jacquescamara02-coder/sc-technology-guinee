@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 import {
   ChevronLeft,
@@ -14,44 +14,43 @@ import {
   Truck,
 } from "lucide-react";
 import {
-  getProduct,
   productImages,
-  productSpecs,
   productReviews,
   averageRating,
-  relatedProducts,
   formatGNF,
 } from "@/lib/data";
+import { useStorefrontProduct, useRelatedProducts } from "@/lib/storefront";
+import { useAdminData } from "@/lib/admin-store";
 import { useCart } from "@/lib/cart-store";
 import { ProductCard } from "@/components/ProductCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const Route = createFileRoute("/product/$productId")({
-  loader: ({ params }) => {
-    const product = getProduct(params.productId);
-    if (!product) throw notFound();
-    return { product };
-  },
   component: ProductDetailPage,
-  notFoundComponent: () => (
-    <div className="px-4 py-10 text-center text-sm text-muted-foreground">Produit introuvable.</div>
-  ),
 });
 
-const FAKE_DESC = `Découvrez un produit conçu pour offrir des performances exceptionnelles dans toutes vos tâches du quotidien comme dans vos usages les plus exigeants. Bénéficiez d'une qualité de fabrication premium, d'une fiabilité éprouvée et d'une garantie constructeur de 12 mois.
-
-Livraison disponible à Conakry, Labé, Kankan, N'Zérékoré, Kindia et Faranah. Paiement à la livraison disponible. Notre équipe technique reste disponible pour toute question avant ou après achat.`;
-
 function ProductDetailPage() {
-  const { product } = Route.useLoaderData();
+  const { productId } = Route.useParams();
   const navigate = useNavigate();
+  const product = useStorefrontProduct(productId);
+  const adminProduct = useAdminData((s) => s.products.find((p) => p.id === productId));
   const add = useCart((s) => s.add);
 
-  const images = useMemo(() => productImages(product), [product]);
-  const specs = useMemo(() => productSpecs(product), [product]);
-  const reviews = useMemo(() => productReviews(product), [product]);
-  const { avg, count } = useMemo(() => averageRating(product), [product]);
-  const related = useMemo(() => relatedProducts(product, 8), [product]);
+  const images = useMemo(() => {
+    if (!adminProduct) return [] as string[];
+    // Convert admin images (urls or gradients) into CSS background-image values
+    const list = adminProduct.images.map((img) =>
+      img.startsWith("data:") || img.startsWith("http") ? `url(${img})` : img,
+    );
+    return list.length > 0 ? list : product ? productImages(product) : [];
+  }, [adminProduct, product]);
+
+  const reviews = useMemo(() => (product ? productReviews(product) : []), [product]);
+  const { avg, count } = useMemo(
+    () => (product ? averageRating(product) : { avg: 0, count: 0 }),
+    [product],
+  );
+  const related = useRelatedProducts(product ?? ({} as never), 8);
 
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
@@ -59,7 +58,32 @@ function ProductDetailPage() {
   const [justAdded, setJustAdded] = useState(false);
   const galleryRef = useRef<HTMLDivElement>(null);
 
+  if (!product || !adminProduct) {
+    return (
+      <div className="px-4 py-10 text-center text-sm text-muted-foreground">
+        Produit introuvable.
+      </div>
+    );
+  }
+
   const inStock = product.stock > 0;
+
+  const specs = [
+    { label: "Marque", value: adminProduct.brand },
+    { label: "Référence", value: adminProduct.sku || adminProduct.id.toUpperCase() },
+    ...adminProduct.specs
+      .filter((s) => s.key || s.value)
+      .map((s) => ({ label: s.key || "Spécification", value: s.value })),
+    { label: "Garantie", value: "12 mois constructeur" },
+    {
+      label: "Disponibilité",
+      value: product.stock > 0 ? `${product.stock} en stock` : "Rupture de stock",
+    },
+  ];
+
+  const description =
+    adminProduct.description?.trim() ||
+    "Produit de qualité disponible chez SC TECHNOLOGY. Livraison sur Conakry et toute la Guinée. Paiement à la livraison disponible.";
 
   const scrollTo = (i: number) => {
     setActiveImg(i);
@@ -91,7 +115,6 @@ function ProductDetailPage() {
         />
       </div>
 
-      {/* Image gallery */}
       <div className="relative mt-3">
         <div
           ref={galleryRef}
@@ -104,7 +127,7 @@ function ProductDetailPage() {
           {images.map((bg, i) => (
             <div
               key={i}
-              className="relative aspect-square w-full shrink-0 snap-center"
+              className="relative aspect-square w-full shrink-0 snap-center bg-cover bg-center"
               style={{ backgroundImage: bg }}
             >
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
@@ -158,14 +181,13 @@ function ProductDetailPage() {
         )}
       </div>
 
-      {/* Thumbnails */}
       {images.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {images.map((bg, i) => (
             <button
               key={i}
               onClick={() => scrollTo(i)}
-              className={`h-16 w-16 shrink-0 rounded-xl border-2 transition ${
+              className={`h-16 w-16 shrink-0 rounded-xl border-2 bg-cover bg-center transition ${
                 activeImg === i ? "border-primary" : "border-border"
               }`}
               style={{ backgroundImage: bg }}
@@ -175,7 +197,6 @@ function ProductDetailPage() {
         </div>
       )}
 
-      {/* Info */}
       <div className="space-y-4 px-4 pt-5">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -183,7 +204,7 @@ function ProductDetailPage() {
               {product.brand}
             </span>
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              Réf: {product.id.toUpperCase()}
+              Réf: {adminProduct.sku || product.id.toUpperCase()}
             </span>
           </div>
           <h1 className="text-2xl font-bold leading-tight tracking-tight text-foreground">{product.name}</h1>
@@ -221,7 +242,6 @@ function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Quantity selector */}
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
           <span className="text-sm font-semibold text-foreground">Quantité</span>
           <div className="flex items-center gap-1 rounded-full border border-border bg-surface">
@@ -243,7 +263,6 @@ function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Specs table */}
         <section>
           <h2 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Caractéristiques techniques
@@ -251,7 +270,7 @@ function ProductDetailPage() {
           <div className="overflow-hidden rounded-2xl border border-border bg-card">
             {specs.map((row, i) => (
               <div
-                key={row.label}
+                key={`${row.label}-${i}`}
                 className={`grid grid-cols-[1fr_1.4fr] gap-3 px-4 py-2.5 text-sm ${
                   i % 2 === 0 ? "bg-surface/40" : ""
                 }`}
@@ -263,24 +282,24 @@ function ProductDetailPage() {
           </div>
         </section>
 
-        {/* Description */}
         <section>
           <h2 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">Description</h2>
           <div className="rounded-2xl border border-border bg-card p-4">
             <p className={`whitespace-pre-line text-sm leading-relaxed text-foreground/90 ${descOpen ? "" : "line-clamp-3"}`}>
-              {FAKE_DESC}
+              {description}
             </p>
-            <button
-              onClick={() => setDescOpen((v) => !v)}
-              className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary"
-            >
-              {descOpen ? "Voir moins" : "Voir plus"}
-              <ChevronDown className={`h-3.5 w-3.5 transition ${descOpen ? "rotate-180" : ""}`} />
-            </button>
+            {description.length > 180 && (
+              <button
+                onClick={() => setDescOpen((v) => !v)}
+                className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary"
+              >
+                {descOpen ? "Voir moins" : "Voir plus"}
+                <ChevronDown className={`h-3.5 w-3.5 transition ${descOpen ? "rotate-180" : ""}`} />
+              </button>
+            )}
           </div>
         </section>
 
-        {/* Trust badges */}
         <div className="grid grid-cols-2 gap-2">
           <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-3">
             <Truck className="h-5 w-5 text-primary" />
@@ -298,35 +317,35 @@ function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Reviews */}
-        <section>
-          <h2 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Avis clients ({reviews.length})
-          </h2>
-          <div className="space-y-2">
-            {reviews.map((r) => (
-              <article key={r.id} className="rounded-2xl border border-border bg-card p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-foreground">{r.author}</div>
-                    <div className="text-[10px] text-muted-foreground">{r.date}</div>
+        {reviews.length > 0 && (
+          <section>
+            <h2 className="mb-2 text-sm font-bold uppercase tracking-wider text-muted-foreground">
+              Avis clients ({reviews.length})
+            </h2>
+            <div className="space-y-2">
+              {reviews.map((r) => (
+                <article key={r.id} className="rounded-2xl border border-border bg-card p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-semibold text-foreground">{r.author}</div>
+                      <div className="text-[10px] text-muted-foreground">{r.date}</div>
+                    </div>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star
+                          key={s}
+                          className={`h-3.5 w-3.5 ${s <= r.rating ? "fill-warning text-warning" : "text-muted-foreground/40"}`}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        className={`h-3.5 w-3.5 ${s <= r.rating ? "fill-warning text-warning" : "text-muted-foreground/40"}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <p className="mt-2 text-sm text-foreground/90">{r.comment}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+                  <p className="mt-2 text-sm text-foreground/90">{r.comment}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* Related */}
         {related.length > 0 && (
           <section>
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">
@@ -343,7 +362,6 @@ function ProductDetailPage() {
         )}
       </div>
 
-      {/* Sticky action bar */}
       <div className="fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom))] z-30 border-t border-border bg-background/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-screen-md gap-2 px-4 py-3">
           <button
@@ -371,7 +389,6 @@ function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Hidden link to keep router type-aware */}
       <Link to="/cart" className="hidden" />
     </div>
   );

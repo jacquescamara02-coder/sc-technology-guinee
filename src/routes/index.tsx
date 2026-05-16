@@ -2,7 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ProductCard } from "@/components/ProductCard";
-import { categories, featured, newArrivals } from "@/lib/data";
+import {
+  useStorefrontCategories,
+  useFeaturedProducts,
+  useNewArrivalProducts,
+} from "@/lib/storefront";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -10,6 +14,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const navigate = useNavigate();
+  const categories = useStorefrontCategories();
+  const featured = useFeaturedProducts().slice(0, 6);
+  const newArrivals = useNewArrivalProducts().slice(0, 6);
+
   return (
     <div className="space-y-7 px-4 py-4">
       <HeroCarousel />
@@ -44,30 +52,34 @@ function Index() {
       </section>
 
       {/* Produits en vedette */}
-      <section>
-        <SectionHeader
-          title="Produits en vedette"
-          action={{ label: "Voir tout", onClick: () => navigate({ to: "/vedette" }) }}
-        />
-        <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
-          {featured.map((p) => (
-            <ProductCard key={p.id} product={p} className="w-44 shrink-0 snap-start" />
-          ))}
-        </div>
-      </section>
+      {featured.length > 0 && (
+        <section>
+          <SectionHeader
+            title="Produits en vedette"
+            action={{ label: "Voir tout", onClick: () => navigate({ to: "/vedette" }) }}
+          />
+          <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+            {featured.map((p) => (
+              <ProductCard key={p.id} product={p} className="w-44 shrink-0 snap-start" />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Nouveautés */}
-      <section>
-        <SectionHeader
-          title="Nouveautés"
-          action={{ label: "Voir tout", onClick: () => navigate({ to: "/nouveautes" }) }}
-        />
-        <div className="grid grid-cols-2 gap-3">
-          {newArrivals.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-      </section>
+      {newArrivals.length > 0 && (
+        <section>
+          <SectionHeader
+            title="Nouveautés"
+            action={{ label: "Voir tout", onClick: () => navigate({ to: "/nouveautes" }) }}
+          />
+          <div className="grid grid-cols-2 gap-3">
+            {newArrivals.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

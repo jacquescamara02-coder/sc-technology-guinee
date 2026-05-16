@@ -272,13 +272,22 @@ export function ProductForm({ initial }: Props) {
       </Section>
 
       <Section title="Prix et stock">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Field label="Prix (GNF)">
             <input
               type="number"
               min={0}
               value={p.price}
               onChange={(e) => set("price", Number(e.target.value))}
+              className="input"
+            />
+          </Field>
+          <Field label="Ancien prix (GNF, optionnel)">
+            <input
+              type="number"
+              min={0}
+              value={p.oldPrice ?? ""}
+              onChange={(e) => set("oldPrice", e.target.value ? Number(e.target.value) : undefined)}
               className="input"
             />
           </Field>
@@ -292,9 +301,23 @@ export function ProductForm({ initial }: Props) {
             />
           </Field>
         </div>
+        <Field label="Badge (optionnel)">
+          <select
+            value={p.badge ?? ""}
+            onChange={(e) =>
+              set("badge", (e.target.value || undefined) as AdminProduct["badge"])
+            }
+            className="input"
+          >
+            <option value="">— Aucun —</option>
+            <option value="Promo">Promo</option>
+            <option value="Nouveau">Nouveau</option>
+            <option value="Top">Top</option>
+          </select>
+        </Field>
       </Section>
 
-      <Section title="Statut & publication">
+      <Section title="Visibilité dans l'application">
         <div className="space-y-3">
           <Toggle
             label="Produit actif"
@@ -303,8 +326,20 @@ export function ProductForm({ initial }: Props) {
             onChange={(v) => set("active", v)}
           />
           <Toggle
+            label="Mettre en vedette"
+            description="Affiché dans la section « Produits en vedette »"
+            value={!!p.featured}
+            onChange={(v) => set("featured", v)}
+          />
+          <Toggle
+            label="Marquer comme nouveauté"
+            description="Affiché dans la section « Nouveautés »"
+            value={!!p.isNew}
+            onChange={(v) => set("isNew", v)}
+          />
+          <Toggle
             label="Publier sur Facebook"
-            description="Publication automatique (à configurer)"
+            description="Publication automatique à l'enregistrement"
             value={p.publishFacebook}
             onChange={(v) => set("publishFacebook", v)}
           />

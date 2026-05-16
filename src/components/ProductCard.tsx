@@ -24,7 +24,7 @@ export function ProductCard({ product, className = "" }: { product: Product; cla
       <Link
         to="/product/$productId"
         params={{ productId: product.id }}
-        className="relative block aspect-square overflow-hidden"
+        className="relative block aspect-square overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: product.image }}
         aria-label={`Voir ${product.name}`}
       >

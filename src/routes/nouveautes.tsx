@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
-import { newArrivalsAll } from "@/lib/data";
+import { useNewArrivalProducts } from "@/lib/storefront";
 
 export const Route = createFileRoute("/nouveautes")({
   component: NouveautesPage,
 });
 
 function NouveautesPage() {
+  const items = useNewArrivalProducts();
   return (
     <div className="px-4 py-4 space-y-4">
       <div className="flex items-center gap-3">
@@ -16,11 +17,17 @@ function NouveautesPage() {
         </Link>
         <h1 className="text-xl font-bold text-foreground">Nouveautés</h1>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        {newArrivalsAll.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+          Aucune nouveauté pour le moment.
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          {items.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
