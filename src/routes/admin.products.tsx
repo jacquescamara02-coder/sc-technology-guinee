@@ -186,7 +186,14 @@ function ProductsPage() {
                         style={{ background: p.images[0] }}
                       />
                       <div className="min-w-0">
-                        <p className="font-medium truncate">{p.name}</p>
+                        <p className="font-medium truncate flex items-center gap-1.5">
+                          {p.name}
+                          {p.facebookStatus === "success" && (
+                            <span title="Publié sur Facebook">
+                              <Facebook className="h-3.5 w-3.5 text-[#1877F2]" />
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-slate-500 font-mono">{p.sku}</p>
                       </div>
                     </div>
