@@ -13,6 +13,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as CommandesRouteImport } from './routes/commandes'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
@@ -38,6 +39,11 @@ const PanierRoute = PanierRouteImport.update({
 const CommandesRoute = CommandesRouteImport.update({
   id: '/commandes',
   path: '/commandes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesRoute = CategoriesRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/categories'
+    | '/checkout'
     | '/commandes'
     | '/panier'
     | '/profil'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/categories'
+    | '/checkout'
     | '/commandes'
     | '/panier'
     | '/profil'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/categories'
+    | '/checkout'
     | '/commandes'
     | '/panier'
     | '/profil'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRouteWithChildren
+  CheckoutRoute: typeof CheckoutRoute
   CommandesRoute: typeof CommandesRoute
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/commandes'
       fullPath: '/commandes'
       preLoaderRoute: typeof CommandesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories': {
@@ -262,6 +282,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRouteWithChildren,
+  CheckoutRoute: CheckoutRoute,
   CommandesRoute: CommandesRoute,
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
