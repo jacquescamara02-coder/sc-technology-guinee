@@ -193,7 +193,7 @@ function OrderDetailPage() {
       </section>
 
       <a
-        href={`https://wa.me/224600000000?text=${waMessage}`}
+        href={`https://wa.me/224620212045?text=${waMessage}`}
         target="_blank"
         rel="noopener noreferrer"
         className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] text-sm font-bold text-white shadow-[var(--shadow-glow)] transition active:scale-[0.98]"

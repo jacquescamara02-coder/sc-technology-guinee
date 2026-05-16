@@ -62,7 +62,7 @@ function AdminLayout() {
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-bold leading-tight">TechShop GN</p>
+            <p className="text-sm font-bold leading-tight">SC TECHNOLOGY</p>
             <p className="text-xs text-slate-500 leading-tight">Administration</p>
           </div>
         </div>
@@ -98,7 +98,7 @@ function AdminLayout() {
                 <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
                   <ShieldCheck className="h-4 w-4" />
                 </div>
-                <p className="text-sm font-bold">TechShop GN Admin</p>
+                <p className="text-sm font-bold">SC TECHNOLOGY Admin</p>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1">
                 <X className="h-5 w-5 text-slate-500" />
@@ -136,7 +136,7 @@ function AdminLayout() {
               <Menu className="h-5 w-5 text-slate-700" />
             </button>
             <h1 className="text-sm md:text-base font-semibold truncate">
-              TechShop GN — Administration
+              SC TECHNOLOGY — Administration
             </h1>
             <div className="ml-auto flex items-center gap-3">
               <span className="hidden sm:inline text-sm text-slate-600">{email}</span>

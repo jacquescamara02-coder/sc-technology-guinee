@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { TopHeader } from "@/components/TopHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { SplashScreen } from "@/components/SplashScreen";
+import { Footer } from "@/components/Footer";
 
 function NotFoundComponent() {
   return (

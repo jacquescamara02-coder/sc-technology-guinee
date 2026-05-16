@@ -137,6 +137,11 @@ function OrderSuccessPage() {
           Continuer les achats
         </Link>
       </div>
+
+      <p className="pt-2 text-center text-xs text-muted-foreground">
+        Merci de votre confiance.<br />
+        <span className="font-semibold text-foreground">L'équipe SC TECHNOLOGY</span>
+      </p>
     </div>
   );
 }

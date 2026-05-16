@@ -15,7 +15,7 @@ ${shortDesc}
 ✅ Livraison disponible sur Conakry et toute la Guinée
 📲 Commandez via notre application
 
-#TechShopGN #Informatique #Guinée #Conakry`;
+#SCTechnology #Informatique #Guinée #Conakry`;
 }
 
 export async function simulateFacebookPublish(p: AdminProduct): Promise<boolean> {
