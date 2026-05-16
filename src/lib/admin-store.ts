@@ -224,6 +224,26 @@ export const useAdminData = create<AdminDataState>()(
         })),
 
       updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
+
+      recordFacebookPost: (post) =>
+        set((s) => {
+          const existingIdx = s.facebookPosts.findIndex((p) => p.productId === post.productId);
+          let posts = s.facebookPosts;
+          if (existingIdx >= 0) {
+            posts = posts.map((p, i) => (i === existingIdx ? post : p));
+          } else {
+            posts = [post, ...posts];
+          }
+          posts = posts.slice(0, 50);
+          return {
+            facebookPosts: posts,
+            products: s.products.map((p) =>
+              p.id === post.productId
+                ? { ...p, facebookPostedAt: post.date, facebookStatus: post.status }
+                : p,
+            ),
+          };
+        }),
     }),
     {
       name: "techshop-admin-data",
