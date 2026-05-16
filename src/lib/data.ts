@@ -342,13 +342,11 @@ export const productsBySub = (catId: string, subId: string) =>
 export const productsByCat = (catId: string) =>
   productsAll.filter((p) => p.category === catId);
 
-export const featured = [...productsAll]
-  .sort((a, b) => b.popularity - a.popularity)
-  .slice(0, 6);
+export const featuredAll = [...productsAll].sort((a, b) => b.popularity - a.popularity);
+export const featured = featuredAll.slice(0, 6);
 
-export const newArrivals = [...productsAll]
-  .sort((a, b) => b.createdAt - a.createdAt)
-  .slice(0, 6);
+export const newArrivalsAll = [...productsAll].sort((a, b) => b.createdAt - a.createdAt);
+export const newArrivals = newArrivalsAll.slice(0, 6);
 
 export const formatGNF = (n: number) =>
   new Intl.NumberFormat("fr-FR").format(n) + " GNF";
