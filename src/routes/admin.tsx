@@ -16,7 +16,9 @@ import {
   Menu,
   X,
   ShieldCheck,
+  Facebook,
 } from "lucide-react";
+import { Toaster } from "sonner";
 import { useAdminAuth } from "@/lib/admin-store";
 
 export const Route = createFileRoute("/admin")({
@@ -28,6 +30,7 @@ const NAV = [
   { to: "/admin/products", label: "Produits", icon: Package },
   { to: "/admin/categories", label: "Catégories", icon: FolderTree },
   { to: "/admin/orders", label: "Commandes", icon: ShoppingBag },
+  { to: "/admin/facebook", label: "Facebook", icon: Facebook },
   { to: "/admin/settings", label: "Paramètres", icon: Settings },
 ] as const;
 
