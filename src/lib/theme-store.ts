@@ -11,70 +11,14 @@ export interface ThemePreset {
 }
 
 export const themePresets: ThemePreset[] = [
-  {
-    id: "blue",
-    name: "Bleu",
-    swatch: "#0066FF",
-    primary: "oklch(0.58 0.24 260)",
-    primaryGlow: "oklch(0.70 0.22 255)",
-    themeColor: "#0066FF",
-  },
-  {
-    id: "orange",
-    name: "Orange",
-    swatch: "#FF6600",
-    primary: "oklch(0.70 0.19 50)",
-    primaryGlow: "oklch(0.78 0.17 60)",
-    themeColor: "#FF6600",
-  },
-  {
-    id: "green",
-    name: "Vert",
-    swatch: "#10B981",
-    primary: "oklch(0.68 0.17 155)",
-    primaryGlow: "oklch(0.76 0.15 160)",
-    themeColor: "#10B981",
-  },
-  {
-    id: "purple",
-    name: "Violet",
-    swatch: "#8B5CF6",
-    primary: "oklch(0.62 0.22 295)",
-    primaryGlow: "oklch(0.72 0.20 300)",
-    themeColor: "#8B5CF6",
-  },
-  {
-    id: "red",
-    name: "Rouge",
-    swatch: "#EF4444",
-    primary: "oklch(0.62 0.24 25)",
-    primaryGlow: "oklch(0.72 0.22 25)",
-    themeColor: "#EF4444",
-  },
-  {
-    id: "pink",
-    name: "Rose",
-    swatch: "#EC4899",
-    primary: "oklch(0.66 0.23 355)",
-    primaryGlow: "oklch(0.76 0.20 350)",
-    themeColor: "#EC4899",
-  },
-  {
-    id: "cyan",
-    name: "Cyan",
-    swatch: "#06B6D4",
-    primary: "oklch(0.70 0.14 210)",
-    primaryGlow: "oklch(0.78 0.12 215)",
-    themeColor: "#06B6D4",
-  },
-  {
-    id: "gold",
-    name: "Or",
-    swatch: "#D4A24C",
-    primary: "oklch(0.74 0.14 85)",
-    primaryGlow: "oklch(0.82 0.12 90)",
-    themeColor: "#D4A24C",
-  },
+  { id: "blue", name: "Bleu", swatch: "#0066FF", primary: "oklch(0.58 0.24 260)", primaryGlow: "oklch(0.70 0.22 255)", themeColor: "#0066FF" },
+  { id: "orange", name: "Orange", swatch: "#FF6600", primary: "oklch(0.70 0.19 50)", primaryGlow: "oklch(0.78 0.17 60)", themeColor: "#FF6600" },
+  { id: "green", name: "Vert", swatch: "#10B981", primary: "oklch(0.68 0.17 155)", primaryGlow: "oklch(0.76 0.15 160)", themeColor: "#10B981" },
+  { id: "purple", name: "Violet", swatch: "#8B5CF6", primary: "oklch(0.62 0.22 295)", primaryGlow: "oklch(0.72 0.20 300)", themeColor: "#8B5CF6" },
+  { id: "red", name: "Rouge", swatch: "#EF4444", primary: "oklch(0.62 0.24 25)", primaryGlow: "oklch(0.72 0.22 25)", themeColor: "#EF4444" },
+  { id: "pink", name: "Rose", swatch: "#EC4899", primary: "oklch(0.66 0.23 355)", primaryGlow: "oklch(0.76 0.20 350)", themeColor: "#EC4899" },
+  { id: "cyan", name: "Cyan", swatch: "#06B6D4", primary: "oklch(0.70 0.14 210)", primaryGlow: "oklch(0.78 0.12 215)", themeColor: "#06B6D4" },
+  { id: "gold", name: "Or", swatch: "#D4A24C", primary: "oklch(0.74 0.14 85)", primaryGlow: "oklch(0.82 0.12 90)", themeColor: "#D4A24C" },
 ];
 
 interface ThemeState {
@@ -82,21 +26,46 @@ interface ThemeState {
   setTheme: (id: string) => void;
 }
 
+export function getPreset(id: string): ThemePreset {
+  return themePresets.find((p) => p.id === id) ?? themePresets[0];
+}
+
+export function applyTheme(id: string) {
+  if (typeof document === "undefined") return;
+  const preset = getPreset(id);
+  const root = document.documentElement;
+  root.style.setProperty("--primary", preset.primary);
+  root.style.setProperty("--primary-glow", preset.primaryGlow);
+  root.style.setProperty("--ring", preset.primary);
+  root.style.setProperty(
+    "--gradient-primary",
+    `linear-gradient(135deg, ${preset.primary}, ${preset.primaryGlow})`,
+  );
+  root.style.setProperty(
+    "--shadow-glow",
+    `0 8px 32px -8px color-mix(in oklab, ${preset.primary} 55%, transparent)`,
+  );
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", preset.themeColor);
+}
+
 export const useTheme = create<ThemeState>()(
   persist(
     (set) => ({
       themeId: "blue",
-      setTheme: (id) => set({ themeId: id }),
+      setTheme: (id) => {
+        applyTheme(id);
+        set({ themeId: id });
+      },
     }),
     {
       name: "sc-theme",
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? window.localStorage : (undefined as never),
       ),
+      onRehydrateStorage: () => (state) => {
+        if (state?.themeId) applyTheme(state.themeId);
+      },
     },
   ),
 );
-
-export function getPreset(id: string): ThemePreset {
-  return themePresets.find((p) => p.id === id) ?? themePresets[0];
-}
