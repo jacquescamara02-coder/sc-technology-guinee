@@ -38,7 +38,7 @@ function SubCategoriesPage() {
       </header>
 
       <div className="grid grid-cols-2 gap-3">
-        {cat.subcategories.map((sub) => {
+        {cat.subcategories.map((sub: { id: string; name: string }) => {
           const count = productsBySub(cat.id, sub.id).length;
           return (
             <Link

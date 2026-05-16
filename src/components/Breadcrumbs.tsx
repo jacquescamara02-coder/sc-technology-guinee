@@ -19,8 +19,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
           <div key={idx} className="flex shrink-0 items-center gap-1">
             <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
             {c.to && !isLast ? (
-              // @ts-expect-error dynamic to
-              <Link to={c.to} params={c.params} className="rounded-full px-2 py-1 font-medium text-muted-foreground transition hover:bg-surface hover:text-foreground">
+              <Link to={c.to as string} params={c.params as never} className="rounded-full px-2 py-1 font-medium text-muted-foreground transition hover:bg-surface hover:text-foreground">
                 {c.label}
               </Link>
             ) : (
