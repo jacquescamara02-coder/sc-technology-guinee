@@ -49,6 +49,7 @@ export interface AdminSettings {
   deliveryFees: DeliveryFee[];
   facebookPageId: string;
   facebookToken: string;
+  facebookAutoPublish: boolean;
 }
 
 interface AdminAuth {
