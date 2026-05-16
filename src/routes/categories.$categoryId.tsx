@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getCategory, productsBySub } from "@/lib/data";
+import { categories, getCategory, productsBySub } from "@/lib/data";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ChevronRight } from "lucide-react";
 
@@ -7,7 +7,7 @@ export const Route = createFileRoute("/categories/$categoryId")({
   loader: ({ params }) => {
     const cat = getCategory(params.categoryId);
     if (!cat) throw notFound();
-    return { cat };
+    return { categoryId: cat.id };
   },
   component: SubCategoriesPage,
   notFoundComponent: () => (
@@ -16,7 +16,9 @@ export const Route = createFileRoute("/categories/$categoryId")({
 });
 
 function SubCategoriesPage() {
-  const { cat } = Route.useLoaderData();
+  const { categoryId } = Route.useLoaderData();
+  const cat = categories.find((category) => category.id === categoryId);
+  if (!cat) return null;
   const Icon = cat.icon;
   return (
     <div className="space-y-4 px-4 py-4">

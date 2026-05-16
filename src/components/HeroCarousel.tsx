@@ -41,7 +41,7 @@ export function HeroCarousel() {
               <div className="space-y-1">
                 <h2 className="text-2xl font-bold leading-tight text-white">{s.title}</h2>
                 <p className="text-sm text-white/80">{s.subtitle}</p>
-                <button className="mt-2 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-foreground transition active:scale-95">
+                <button className="mt-2 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-primary transition active:scale-95">
                   {s.cta} <ChevronRight className="h-3.5 w-3.5" />
                 </button>
               </div>
