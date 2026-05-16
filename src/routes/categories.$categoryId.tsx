@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound, Outlet, useLocation } from "@tanstack/react-router";
 import { categories, getCategory, productsBySub } from "@/lib/data";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ChevronRight } from "lucide-react";
@@ -18,7 +18,6 @@ export const Route = createFileRoute("/categories/$categoryId")({
 function SubCategoriesPage() {
   const { categoryId } = Route.useLoaderData();
   const location = useLocation();
-  const navigate = useNavigate();
   const cat = categories.find((category) => category.id === categoryId);
   if (!cat) return null;
   if (location.pathname !== `/categories/${categoryId}`) return <Outlet />;
@@ -47,10 +46,9 @@ function SubCategoriesPage() {
         {cat.subcategories.map((sub: { id: string; name: string }) => {
           const count = productsBySub(cat.id, sub.id).length;
           return (
-            <button
-              type="button"
+            <a
               key={sub.id}
-              onClick={() => navigate({ to: "/categories/$categoryId/$subCategoryId", params: { categoryId: cat.id, subCategoryId: sub.id } })}
+              href={`/categories/${cat.id}/${sub.id}`}
               className="group flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 active:scale-[0.99]"
             >
               <div className="text-sm font-semibold text-foreground">{sub.name}</div>
@@ -58,7 +56,7 @@ function SubCategoriesPage() {
               <div className="mt-auto inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
                 Voir <ChevronRight className="h-3 w-3" />
               </div>
-            </button>
+            </a>
           );
         })}
       </div>
