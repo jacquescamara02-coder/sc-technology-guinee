@@ -164,6 +164,7 @@ export const useAdminData = create<AdminDataState>()(
       products: seededProducts,
       categories: seededCategories,
       settings: defaultSettings,
+      facebookPosts: [],
 
       addProduct: (p) => set((s) => ({ products: [p, ...s.products] })),
       updateProduct: (id, patch) =>
