@@ -94,10 +94,8 @@ function AdminLayout() {
           <aside className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl flex flex-col">
             <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
-                  <ShieldCheck className="h-4 w-4" />
-                </div>
-                <p className="text-sm font-bold">SC TECHNOLOGY Admin</p>
+                <img src={logoUrl} alt="SC TECHNOLOGY" className="h-9 w-9 rounded-lg bg-white border border-slate-200 p-0.5 object-contain" />
+                <p className="text-sm font-bold text-slate-900">SC TECHNOLOGY <span className="text-blue-600">Admin</span></p>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1">
                 <X className="h-5 w-5 text-slate-500" />
