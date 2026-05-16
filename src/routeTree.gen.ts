@@ -14,7 +14,6 @@ import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
-import { Route as CommandesRouteImport } from './routes/commandes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CartRouteImport } from './routes/cart'
@@ -48,11 +47,6 @@ const OrdersRoute = OrdersRouteImport.update({
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order-success',
   path: '/order-success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommandesRoute = CommandesRouteImport.update({
-  id: '/commandes',
-  path: '/commandes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -107,7 +101,6 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
@@ -124,7 +117,6 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
@@ -142,7 +134,6 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
@@ -161,7 +152,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
     | '/order-success'
     | '/orders'
     | '/panier'
@@ -178,7 +168,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
     | '/order-success'
     | '/orders'
     | '/panier'
@@ -195,7 +184,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
     | '/order-success'
     | '/orders'
     | '/panier'
@@ -213,7 +201,6 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
-  CommandesRoute: typeof CommandesRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   OrdersRoute: typeof OrdersRouteWithChildren
   PanierRoute: typeof PanierRoute
@@ -258,13 +245,6 @@ declare module '@tanstack/react-router' {
       path: '/order-success'
       fullPath: '/order-success'
       preLoaderRoute: typeof OrderSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/commandes': {
-      id: '/commandes'
-      path: '/commandes'
-      fullPath: '/commandes'
-      preLoaderRoute: typeof CommandesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -373,7 +353,6 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
-  CommandesRoute: CommandesRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   OrdersRoute: OrdersRouteWithChildren,
   PanierRoute: PanierRoute,
@@ -385,3 +364,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
