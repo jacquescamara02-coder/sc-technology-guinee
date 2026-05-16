@@ -52,16 +52,21 @@ function CheckoutPage() {
   const tva = Math.round(subtotal * TVA_RATE);
   const total = subtotal + tva;
 
+  const setDelivery = useOrders((s) => s.setDelivery);
+  const savedDelivery = useOrders((s) => s.delivery);
+
   const [summaryOpen, setSummaryOpen] = useState(false);
-  const [form, setForm] = useState<FormState>({
-    fullName: "",
-    phone: "+224 ",
-    email: "",
-    city: "",
-    district: "",
-    address: "",
-    notes: "",
-  });
+  const [form, setForm] = useState<FormState>(
+    savedDelivery ?? {
+      fullName: "",
+      phone: "+224 ",
+      email: "",
+      city: "",
+      district: "",
+      address: "",
+      notes: "",
+    },
+  );
   const [errors, setErrors] = useState<Errors>({});
 
   if (items.length === 0) {
