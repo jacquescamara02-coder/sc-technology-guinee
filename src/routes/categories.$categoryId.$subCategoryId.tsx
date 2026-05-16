@@ -13,7 +13,7 @@ export const Route = createFileRoute("/categories/$categoryId/$subCategoryId")({
     const cat = getCategory(params.categoryId);
     const sub = getSubcategory(params.categoryId, params.subCategoryId);
     if (!cat || !sub) throw notFound();
-    return { cat, sub };
+    return { categoryId: cat.id, subCategoryId: sub.id };
   },
   component: ProductsListPage,
   notFoundComponent: () => (
@@ -24,7 +24,10 @@ export const Route = createFileRoute("/categories/$categoryId/$subCategoryId")({
 const PAGE_SIZE = 8;
 
 function ProductsListPage() {
-  const { cat, sub } = Route.useLoaderData();
+  const { categoryId, subCategoryId } = Route.useLoaderData();
+  const cat = getCategory(categoryId);
+  const sub = getSubcategory(categoryId, subCategoryId);
+  if (!cat || !sub) return null;
   const all = useMemo(() => productsBySub(cat.id, sub.id), [cat.id, sub.id]);
 
   const brands = useMemo(() => Array.from(new Set(all.map((p) => p.brand))).sort(), [all]);
