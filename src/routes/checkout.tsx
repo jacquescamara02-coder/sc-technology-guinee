@@ -105,9 +105,8 @@ function CheckoutPage() {
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
-    // Step 2 (paiement) not implemented yet — just go back to cart with a confirmation
-    alert("Informations enregistrées. L'étape Paiement sera disponible prochainement.");
-    navigate({ to: "/cart" });
+    setDelivery(form);
+    navigate({ to: "/checkout/payment" });
   };
 
   return (
