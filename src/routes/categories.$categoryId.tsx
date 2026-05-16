@@ -49,6 +49,10 @@ function SubCategoriesPage() {
             <a
               key={sub.id}
               href={`/categories/${cat.id}/${sub.id}`}
+              onClick={(event) => {
+                event.preventDefault();
+                window.location.assign(new URL(`/categories/${cat.id}/${sub.id}`, window.location.origin).toString());
+              }}
               className="group flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/40 active:scale-[0.99]"
             >
               <div className="text-sm font-semibold text-foreground">{sub.name}</div>
