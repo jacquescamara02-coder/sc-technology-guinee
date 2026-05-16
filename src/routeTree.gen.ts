@@ -9,12 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as CommandesRouteImport } from './routes/commandes'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CategoriesCategoryIdRouteImport } from './routes/categories.$categoryId'
+import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfilRoute = ProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
@@ -40,47 +48,100 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriesCategoryIdRoute = CategoriesCategoryIdRouteImport.update({
+  id: '/$categoryId',
+  path: '/$categoryId',
+  getParentRoute: () => CategoriesRoute,
+} as any)
+const CategoriesCategoryIdSubCategoryIdRoute =
+  CategoriesCategoryIdSubCategoryIdRouteImport.update({
+    id: '/$subCategoryId',
+    path: '/$subCategoryId',
+    getParentRoute: () => CategoriesCategoryIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
+  '/categories': typeof CategoriesRouteWithChildren
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
+  '/search': typeof SearchRoute
+  '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
+  '/categories': typeof CategoriesRouteWithChildren
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
+  '/search': typeof SearchRoute
+  '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/categories': typeof CategoriesRoute
+  '/categories': typeof CategoriesRouteWithChildren
   '/commandes': typeof CommandesRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
+  '/search': typeof SearchRoute
+  '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/categories' | '/commandes' | '/panier' | '/profil'
+  fullPaths:
+    | '/'
+    | '/categories'
+    | '/commandes'
+    | '/panier'
+    | '/profil'
+    | '/search'
+    | '/categories/$categoryId'
+    | '/categories/$categoryId/$subCategoryId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/categories' | '/commandes' | '/panier' | '/profil'
-  id: '__root__' | '/' | '/categories' | '/commandes' | '/panier' | '/profil'
+  to:
+    | '/'
+    | '/categories'
+    | '/commandes'
+    | '/panier'
+    | '/profil'
+    | '/search'
+    | '/categories/$categoryId'
+    | '/categories/$categoryId/$subCategoryId'
+  id:
+    | '__root__'
+    | '/'
+    | '/categories'
+    | '/commandes'
+    | '/panier'
+    | '/profil'
+    | '/search'
+    | '/categories/$categoryId'
+    | '/categories/$categoryId/$subCategoryId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CategoriesRoute: typeof CategoriesRoute
+  CategoriesRoute: typeof CategoriesRouteWithChildren
   CommandesRoute: typeof CommandesRoute
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
+  SearchRoute: typeof SearchRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profil': {
       id: '/profil'
       path: '/profil'
@@ -116,16 +177,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/categories/$categoryId': {
+      id: '/categories/$categoryId'
+      path: '/$categoryId'
+      fullPath: '/categories/$categoryId'
+      preLoaderRoute: typeof CategoriesCategoryIdRouteImport
+      parentRoute: typeof CategoriesRoute
+    }
+    '/categories/$categoryId/$subCategoryId': {
+      id: '/categories/$categoryId/$subCategoryId'
+      path: '/$subCategoryId'
+      fullPath: '/categories/$categoryId/$subCategoryId'
+      preLoaderRoute: typeof CategoriesCategoryIdSubCategoryIdRouteImport
+      parentRoute: typeof CategoriesCategoryIdRoute
+    }
   }
 }
 
+interface CategoriesCategoryIdRouteChildren {
+  CategoriesCategoryIdSubCategoryIdRoute: typeof CategoriesCategoryIdSubCategoryIdRoute
+}
+
+const CategoriesCategoryIdRouteChildren: CategoriesCategoryIdRouteChildren = {
+  CategoriesCategoryIdSubCategoryIdRoute:
+    CategoriesCategoryIdSubCategoryIdRoute,
+}
+
+const CategoriesCategoryIdRouteWithChildren =
+  CategoriesCategoryIdRoute._addFileChildren(CategoriesCategoryIdRouteChildren)
+
+interface CategoriesRouteChildren {
+  CategoriesCategoryIdRoute: typeof CategoriesCategoryIdRouteWithChildren
+}
+
+const CategoriesRouteChildren: CategoriesRouteChildren = {
+  CategoriesCategoryIdRoute: CategoriesCategoryIdRouteWithChildren,
+}
+
+const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
+  CategoriesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CategoriesRoute: CategoriesRoute,
+  CategoriesRoute: CategoriesRouteWithChildren,
   CommandesRoute: CommandesRoute,
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
+  SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
