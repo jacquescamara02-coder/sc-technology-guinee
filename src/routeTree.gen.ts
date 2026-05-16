@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
+import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as CommandesRouteImport } from './routes/commandes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
@@ -35,6 +36,11 @@ const ProfilRoute = ProfilRouteImport.update({
 const PanierRoute = PanierRouteImport.update({
   id: '/panier',
   path: '/panier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderSuccessRoute = OrderSuccessRouteImport.update({
+  id: '/order-success',
+  path: '/order-success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommandesRoute = CommandesRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/commandes'
+    | '/order-success'
     | '/panier'
     | '/profil'
     | '/search'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/commandes'
+    | '/order-success'
     | '/panier'
     | '/profil'
     | '/search'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/commandes'
+    | '/order-success'
     | '/panier'
     | '/profil'
     | '/search'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   CategoriesRoute: typeof CategoriesRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   CommandesRoute: typeof CommandesRoute
+  OrderSuccessRoute: typeof OrderSuccessRoute
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
   SearchRoute: typeof SearchRoute
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/panier'
       fullPath: '/panier'
       preLoaderRoute: typeof PanierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-success': {
+      id: '/order-success'
+      path: '/order-success'
+      fullPath: '/order-success'
+      preLoaderRoute: typeof OrderSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/commandes': {
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriesRoute: CategoriesRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   CommandesRoute: CommandesRoute,
+  OrderSuccessRoute: OrderSuccessRoute,
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
   SearchRoute: SearchRoute,
