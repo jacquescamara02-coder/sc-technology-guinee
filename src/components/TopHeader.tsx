@@ -12,14 +12,12 @@ export function TopHeader() {
         <Link to="/" className="shrink-0">
           <Logo />
         </Link>
-        <div className="relative flex-1">
+        <Link to="/search" className="relative flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="search"
-            placeholder="Rechercher un produit..."
-            className="h-10 w-full rounded-full border border-border bg-surface pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-          />
-        </div>
+          <div className="flex h-10 w-full items-center rounded-full border border-border bg-surface pl-9 pr-3 text-sm text-muted-foreground">
+            Rechercher un produit...
+          </div>
+        </Link>
         <Link
           to="/panier"
           className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full bg-surface text-foreground transition hover:bg-accent"
