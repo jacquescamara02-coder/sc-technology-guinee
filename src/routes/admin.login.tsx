@@ -33,11 +33,15 @@ function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-100 via-white to-blue-50">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 mb-4">
-            <ShieldCheck className="h-7 w-7" />
+          <div className="inline-flex items-center justify-center h-24 w-24 rounded-3xl bg-white shadow-xl shadow-blue-600/10 border border-slate-200 mb-5 p-2">
+            <img
+              src={logoUrl}
+              alt="SC TECHNOLOGY"
+              className="h-full w-full object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">SC TECHNOLOGY Admin</h1>
-          <p className="text-sm text-slate-500 mt-1">Espace réservé à l'administration</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SC TECHNOLOGY <span className="text-blue-600">Admin</span></h1>
+          <p className="text-sm text-slate-500 mt-1.5">Espace réservé à l'administration</p>
         </div>
 
         <form
