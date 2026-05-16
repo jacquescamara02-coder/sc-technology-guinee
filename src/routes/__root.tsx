@@ -15,6 +15,7 @@ import { TopHeader } from "@/components/TopHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { SplashScreen } from "@/components/SplashScreen";
 import { Footer } from "@/components/Footer";
+import { ThemeApplier } from "@/components/ThemeApplier";
 
 function NotFoundComponent() {
   return (
