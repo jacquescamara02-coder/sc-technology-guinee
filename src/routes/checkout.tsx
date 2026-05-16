@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Check, Truck, CreditCard, ClipboardCheck } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { formatGNF } from "@/lib/data";
+import { useOrders } from "@/lib/orders-store";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
