@@ -33,6 +33,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminFacebookRouteImport } from './routes/admin.facebook'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
 import { Route as AdminProductsProductIdFacebookPreviewRouteImport } from './routes/admin.products.$productId.facebook-preview'
@@ -158,6 +159,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBannersRoute = AdminBannersRouteImport.update({
+  id: '/banners',
+  path: '/banners',
+  getParentRoute: () => AdminRoute,
+} as any)
 const CategoriesCategoryIdSubCategoryIdRoute =
   CategoriesCategoryIdSubCategoryIdRouteImport.update({
     id: '/$subCategoryId',
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/vedette': typeof VedetteRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -224,6 +231,7 @@ export interface FileRoutesByTo {
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/vedette': typeof VedetteRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -255,6 +263,7 @@ export interface FileRoutesById {
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/vedette': typeof VedetteRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/search'
     | '/vedette'
+    | '/admin/banners'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/search'
     | '/vedette'
+    | '/admin/banners'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/search'
     | '/vedette'
+    | '/admin/banners'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -551,6 +563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/banners': {
+      id: '/admin/banners'
+      path: '/banners'
+      fullPath: '/admin/banners'
+      preLoaderRoute: typeof AdminBannersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/categories/$categoryId/$subCategoryId': {
       id: '/categories/$categoryId/$subCategoryId'
       path: '/$subCategoryId'
@@ -600,6 +619,7 @@ const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
+  AdminBannersRoute: typeof AdminBannersRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminFacebookRoute: typeof AdminFacebookRoute
@@ -611,6 +631,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBannersRoute: AdminBannersRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminFacebookRoute: AdminFacebookRoute,
