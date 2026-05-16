@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { useAdminAuth } from "@/lib/admin-store";
+import logoUrl from "@/assets/sc-logo.png";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
