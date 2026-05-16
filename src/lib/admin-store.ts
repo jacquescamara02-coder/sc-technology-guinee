@@ -114,7 +114,7 @@ const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
   price: p.price,
   stock: p.stock,
   sku: p.id.toUpperCase(),
-  description: `${p.name} — ${p.specs}. Produit disponible chez TechShop GN.`,
+  description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGY.`,
   specs: p.specs.split("•").map((s, i) => ({ key: `Spécification ${i + 1}`, value: s.trim() })),
   images: [p.image],
   active: true,
@@ -128,10 +128,10 @@ const seededCategories: AdminCategory[] = seedCategories.map((c) => ({
 }));
 
 const defaultSettings: AdminSettings = {
-  storeName: "TechShop GN",
-  contactEmail: "contact@techshopgn.com",
-  contactPhone: "+224 620 00 00 00",
-  whatsapp: "+224 620 00 00 00",
+  storeName: "SC TECHNOLOGY",
+  contactEmail: "contact@sctechnology.gn",
+  contactPhone: "+224 620-21-20-45",
+  whatsapp: "+224 620-21-20-45",
   deliveryFees: [
     { city: "Conakry", fee: 50_000 },
     { city: "Labé", fee: 150_000 },

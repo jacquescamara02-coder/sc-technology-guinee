@@ -35,7 +35,7 @@ function AdminLoginPage() {
           <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 mb-4">
             <ShieldCheck className="h-7 w-7" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">TechShop GN Admin</h1>
+          <h1 className="text-2xl font-bold text-slate-900">SC TECHNOLOGY Admin</h1>
           <p className="text-sm text-slate-500 mt-1">Espace réservé à l'administration</p>
         </div>
 
