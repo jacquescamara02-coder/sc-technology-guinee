@@ -52,7 +52,9 @@ export function ProductCard({ product, className = "" }: { product: Product; cla
       </Link>
       <div className="flex flex-1 flex-col gap-2 p-3">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{product.brand}</div>
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground">{product.name}</h3>
+        <Link to="/product/$productId" params={{ productId: product.id }} className="line-clamp-2 text-sm font-semibold leading-snug text-foreground hover:text-primary">
+          {product.name}
+        </Link>
         <div className="mt-auto">
           <div className="flex items-baseline gap-1.5">
             <span className="text-sm font-bold text-foreground">{formatGNF(product.price)}</span>
