@@ -146,6 +146,7 @@ const defaultSettings: AdminSettings = {
   ],
   facebookPageId: "",
   facebookToken: "",
+  facebookAutoPublish: false,
 };
 
 function slug(s: string) {
