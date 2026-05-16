@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { categories, products, formatGNF } from "@/lib/data";
+import { useStorefrontCategories, useStorefrontProducts } from "@/lib/storefront";
+import { formatGNF } from "@/lib/data";
 import { Search as SearchIcon, Clock, X, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/search")({
@@ -12,6 +13,8 @@ const RECENT_KEY = "techshop_recent_searches";
 function SearchPage() {
   const [query, setQuery] = useState("");
   const [recent, setRecent] = useState<string[]>([]);
+  const categories = useStorefrontCategories();
+  const products = useStorefrontProducts();
 
   useEffect(() => {
     try {
@@ -39,7 +42,7 @@ function SearchPage() {
     return products.filter((p) =>
       `${p.name} ${p.brand} ${p.specs}`.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, products]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, typeof results>();
@@ -48,11 +51,11 @@ function SearchPage() {
       arr.push(p);
       map.set(p.category, arr);
     }
-    return Array.from(map.entries()).map(([catId, items]) => ({
-      cat: categories.find((c) => c.id === catId)!,
-      items,
-    }));
-  }, [results]);
+    return Array.from(map.entries()).flatMap(([catId, items]) => {
+      const cat = categories.find((c) => c.id === catId);
+      return cat ? [{ cat, items }] : [];
+    });
+  }, [results, categories]);
 
   return (
     <div className="space-y-4 px-4 py-4">
@@ -105,23 +108,6 @@ function SearchPage() {
         </section>
       )}
 
-      {!query && (
-        <section>
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Suggestions populaires</h2>
-          <div className="flex flex-wrap gap-2">
-            {["MacBook", "RTX 4070", "iPhone", "SSD NVMe", "Routeur WiFi 6", "Casque Sony", "Imprimante laser"].map((s) => (
-              <button
-                key={s}
-                onClick={() => { setQuery(s); saveRecent(s); }}
-                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
       {query && (
         <div className="text-xs text-muted-foreground">
           {results.length} résultat{results.length > 1 ? "s" : ""} pour « {query} »
@@ -150,13 +136,13 @@ function SearchPage() {
             {items.slice(0, 5).map((p) => (
               <li key={p.id}>
                 <Link
-                  to="/categories/$categoryId/$subCategoryId"
-                  params={{ categoryId: p.category, subCategoryId: p.subcategory }}
+                  to="/product/$productId"
+                  params={{ productId: p.id }}
                   onClick={() => saveRecent(query)}
                   className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-surface"
                 >
                   <div
-                    className="h-12 w-12 shrink-0 rounded-lg"
+                    className="h-12 w-12 shrink-0 rounded-lg bg-cover bg-center"
                     style={{ backgroundImage: p.image }}
                   />
                   <div className="min-w-0 flex-1">
