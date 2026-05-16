@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Lock, Mail, ShieldCheck } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-store";
+import logoUrl from "@/assets/sc-logo.png";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
