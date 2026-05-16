@@ -16,6 +16,18 @@ export interface AdminProduct {
   images: string[]; // data URLs or gradient strings
   active: boolean;
   publishFacebook: boolean;
+  facebookPostedAt?: string;
+  facebookStatus?: "success" | "failed" | "pending";
+}
+
+export interface FacebookPost {
+  id: string;
+  productId: string;
+  productName: string;
+  productImage: string;
+  caption: string;
+  date: string;
+  status: "success" | "failed" | "pending";
 }
 
 export interface AdminCategory {
@@ -37,6 +49,7 @@ export interface AdminSettings {
   deliveryFees: DeliveryFee[];
   facebookPageId: string;
   facebookToken: string;
+  facebookAutoPublish: boolean;
 }
 
 interface AdminAuth {
@@ -76,6 +89,7 @@ interface AdminDataState {
   products: AdminProduct[];
   categories: AdminCategory[];
   settings: AdminSettings;
+  facebookPosts: FacebookPost[];
   addProduct: (p: AdminProduct) => void;
   updateProduct: (id: string, patch: Partial<AdminProduct>) => void;
   deleteProduct: (id: string) => void;
@@ -88,6 +102,7 @@ interface AdminDataState {
   updateSubcategory: (catId: string, subId: string, name: string) => void;
   deleteSubcategory: (catId: string, subId: string) => void;
   updateSettings: (patch: Partial<AdminSettings>) => void;
+  recordFacebookPost: (post: FacebookPost) => void;
 }
 
 const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
@@ -131,6 +146,7 @@ const defaultSettings: AdminSettings = {
   ],
   facebookPageId: "",
   facebookToken: "",
+  facebookAutoPublish: false,
 };
 
 function slug(s: string) {
@@ -148,6 +164,7 @@ export const useAdminData = create<AdminDataState>()(
       products: seededProducts,
       categories: seededCategories,
       settings: defaultSettings,
+      facebookPosts: [],
 
       addProduct: (p) => set((s) => ({ products: [p, ...s.products] })),
       updateProduct: (id, patch) =>
@@ -207,6 +224,26 @@ export const useAdminData = create<AdminDataState>()(
         })),
 
       updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
+
+      recordFacebookPost: (post) =>
+        set((s) => {
+          const existingIdx = s.facebookPosts.findIndex((p) => p.productId === post.productId);
+          let posts = s.facebookPosts;
+          if (existingIdx >= 0) {
+            posts = posts.map((p, i) => (i === existingIdx ? post : p));
+          } else {
+            posts = [post, ...posts];
+          }
+          posts = posts.slice(0, 50);
+          return {
+            facebookPosts: posts,
+            products: s.products.map((p) =>
+              p.id === post.productId
+                ? { ...p, facebookPostedAt: post.date, facebookStatus: post.status }
+                : p,
+            ),
+          };
+        }),
     }),
     {
       name: "techshop-admin-data",

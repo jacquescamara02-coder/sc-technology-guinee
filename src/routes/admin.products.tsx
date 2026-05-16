@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil } from "lucide-react";
+import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook } from "lucide-react";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
 
@@ -186,7 +186,14 @@ function ProductsPage() {
                         style={{ background: p.images[0] }}
                       />
                       <div className="min-w-0">
-                        <p className="font-medium truncate">{p.name}</p>
+                        <p className="font-medium truncate flex items-center gap-1.5">
+                          {p.name}
+                          {p.facebookStatus === "success" && (
+                            <span title="Publié sur Facebook">
+                              <Facebook className="h-3.5 w-3.5 text-[#1877F2]" />
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-slate-500 font-mono">{p.sku}</p>
                       </div>
                     </div>
@@ -222,13 +229,24 @@ function ProductsPage() {
                     )}
                   </td>
                   <td className="px-3 py-2 text-right">
-                    <Link
-                      to="/admin/products/$productId/edit"
-                      params={{ productId: p.id }}
-                      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-blue-600 hover:bg-blue-50"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Link>
+                    <div className="inline-flex items-center gap-1">
+                      <Link
+                        to="/admin/products/$productId/facebook-preview"
+                        params={{ productId: p.id }}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-[#1877F2] hover:bg-blue-50"
+                        title="Aperçu Facebook"
+                      >
+                        <Facebook className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        to="/admin/products/$productId/edit"
+                        params={{ productId: p.id }}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-blue-600 hover:bg-blue-50"
+                        title="Modifier"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}

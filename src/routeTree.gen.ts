@@ -28,10 +28,12 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminFacebookRouteImport } from './routes/admin.facebook'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
+import { Route as AdminProductsProductIdFacebookPreviewRouteImport } from './routes/admin.products.$productId.facebook-preview'
 import { Route as AdminProductsProductIdEditRouteImport } from './routes/admin.products.$productId.edit'
 
 const SearchRoute = SearchRouteImport.update({
@@ -129,6 +131,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFacebookRoute = AdminFacebookRouteImport.update({
+  id: '/facebook',
+  path: '/facebook',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -150,6 +157,12 @@ const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AdminProductsRoute,
 } as any)
+const AdminProductsProductIdFacebookPreviewRoute =
+  AdminProductsProductIdFacebookPreviewRouteImport.update({
+    id: '/$productId/facebook-preview',
+    path: '/$productId/facebook-preview',
+    getParentRoute: () => AdminProductsRoute,
+  } as any)
 const AdminProductsProductIdEditRoute =
   AdminProductsProductIdEditRouteImport.update({
     id: '/$productId/edit',
@@ -170,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/facebook': typeof AdminFacebookRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRouteWithChildren
@@ -182,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -195,6 +210,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/facebook': typeof AdminFacebookRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRouteWithChildren
@@ -207,6 +223,7 @@ export interface FileRoutesByTo {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -222,6 +239,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/facebook': typeof AdminFacebookRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRouteWithChildren
@@ -234,6 +252,7 @@ export interface FileRoutesById {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
   '/admin/products/$productId/edit': typeof AdminProductsProductIdEditRoute
+  '/admin/products/$productId/facebook-preview': typeof AdminProductsProductIdFacebookPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -250,6 +269,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/admin/categories'
     | '/admin/dashboard'
+    | '/admin/facebook'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/products'
@@ -262,6 +282,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -275,6 +296,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/admin/categories'
     | '/admin/dashboard'
+    | '/admin/facebook'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/products'
@@ -287,6 +309,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   id:
     | '__root__'
     | '/'
@@ -301,6 +324,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/admin/categories'
     | '/admin/dashboard'
+    | '/admin/facebook'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/products'
@@ -313,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/categories/$categoryId/$subCategoryId'
     | '/admin/products/$productId/edit'
+    | '/admin/products/$productId/facebook-preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -465,6 +490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/facebook': {
+      id: '/admin/facebook'
+      path: '/facebook'
+      fullPath: '/admin/facebook'
+      preLoaderRoute: typeof AdminFacebookRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -493,6 +525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsNewRouteImport
       parentRoute: typeof AdminProductsRoute
     }
+    '/admin/products/$productId/facebook-preview': {
+      id: '/admin/products/$productId/facebook-preview'
+      path: '/$productId/facebook-preview'
+      fullPath: '/admin/products/$productId/facebook-preview'
+      preLoaderRoute: typeof AdminProductsProductIdFacebookPreviewRouteImport
+      parentRoute: typeof AdminProductsRoute
+    }
     '/admin/products/$productId/edit': {
       id: '/admin/products/$productId/edit'
       path: '/$productId/edit'
@@ -506,11 +545,14 @@ declare module '@tanstack/react-router' {
 interface AdminProductsRouteChildren {
   AdminProductsNewRoute: typeof AdminProductsNewRoute
   AdminProductsProductIdEditRoute: typeof AdminProductsProductIdEditRoute
+  AdminProductsProductIdFacebookPreviewRoute: typeof AdminProductsProductIdFacebookPreviewRoute
 }
 
 const AdminProductsRouteChildren: AdminProductsRouteChildren = {
   AdminProductsNewRoute: AdminProductsNewRoute,
   AdminProductsProductIdEditRoute: AdminProductsProductIdEditRoute,
+  AdminProductsProductIdFacebookPreviewRoute:
+    AdminProductsProductIdFacebookPreviewRoute,
 }
 
 const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
@@ -520,6 +562,7 @@ const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminFacebookRoute: typeof AdminFacebookRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRouteWithChildren
@@ -530,6 +573,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminFacebookRoute: AdminFacebookRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRouteWithChildren,
