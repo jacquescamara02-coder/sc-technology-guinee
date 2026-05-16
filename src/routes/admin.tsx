@@ -15,7 +15,6 @@ import {
   LogOut,
   Menu,
   X,
-  ShieldCheck,
   Facebook,
 } from "lucide-react";
 import { Toaster } from "sonner";
