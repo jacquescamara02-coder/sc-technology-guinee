@@ -15,6 +15,7 @@ import { TopHeader } from "@/components/TopHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { SplashScreen } from "@/components/SplashScreen";
 import { Footer } from "@/components/Footer";
+import { ThemeApplier } from "@/components/ThemeApplier";
 
 function NotFoundComponent() {
   return (
@@ -105,6 +106,7 @@ function RootComponent() {
   if (isAdmin) {
     return (
       <QueryClientProvider client={queryClient}>
+        <ThemeApplier />
         <div className="min-h-screen bg-slate-50 text-slate-900">
           <Outlet />
         </div>
@@ -113,6 +115,7 @@ function RootComponent() {
   }
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeApplier />
       <SplashScreen />
       <div className="min-h-screen bg-background pb-20">
         <TopHeader />

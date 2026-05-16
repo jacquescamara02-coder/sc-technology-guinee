@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { User, MapPin, CreditCard, Bell, HelpCircle, LogOut, ChevronRight, Shield, Heart } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { ThemePicker } from "@/components/ThemePicker";
 
 export const Route = createFileRoute("/profil")({
   component: ProfilePage,
@@ -39,6 +40,8 @@ function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <ThemePicker />
 
       {groups.map((g) => (
         <section key={g.title}>
