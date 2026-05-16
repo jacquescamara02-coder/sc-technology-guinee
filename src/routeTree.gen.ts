@@ -24,6 +24,7 @@ import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as CheckoutPaymentRouteImport } from './routes/checkout_.payment'
 import { Route as CategoriesCategoryIdRouteImport } from './routes/categories.$categoryId'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 
 const SearchRoute = SearchRouteImport.update({
@@ -101,6 +102,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 const CategoriesCategoryIdSubCategoryIdRoute =
   CategoriesCategoryIdSubCategoryIdRouteImport.update({
     id: '/$subCategoryId',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout/payment': typeof CheckoutPaymentRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout/payment': typeof CheckoutPaymentRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
   '/checkout_/payment': typeof CheckoutPaymentRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout/payment'
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout/payment'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/panier'
     | '/profil'
     | '/search'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/categories/$categoryId'
     | '/checkout_/payment'
@@ -342,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/categories/$categoryId/$subCategoryId': {
       id: '/categories/$categoryId/$subCategoryId'
       path: '/$subCategoryId'
@@ -353,10 +372,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
 }
 
