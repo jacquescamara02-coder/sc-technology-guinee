@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Check, Truck, CreditCard, ClipboardCheck } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { formatGNF } from "@/lib/data";
+import { useOrders } from "@/lib/orders-store";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -51,16 +52,21 @@ function CheckoutPage() {
   const tva = Math.round(subtotal * TVA_RATE);
   const total = subtotal + tva;
 
+  const setDelivery = useOrders((s) => s.setDelivery);
+  const savedDelivery = useOrders((s) => s.delivery);
+
   const [summaryOpen, setSummaryOpen] = useState(false);
-  const [form, setForm] = useState<FormState>({
-    fullName: "",
-    phone: "+224 ",
-    email: "",
-    city: "",
-    district: "",
-    address: "",
-    notes: "",
-  });
+  const [form, setForm] = useState<FormState>(
+    savedDelivery ?? {
+      fullName: "",
+      phone: "+224 ",
+      email: "",
+      city: "",
+      district: "",
+      address: "",
+      notes: "",
+    },
+  );
   const [errors, setErrors] = useState<Errors>({});
 
   if (items.length === 0) {
@@ -99,9 +105,8 @@ function CheckoutPage() {
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
-    // Step 2 (paiement) not implemented yet — just go back to cart with a confirmation
-    alert("Informations enregistrées. L'étape Paiement sera disponible prochainement.");
-    navigate({ to: "/cart" });
+    setDelivery(form);
+    navigate({ to: "/checkout/payment" });
   };
 
   return (

@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 
 interface Tab {
-  to: "/" | "/categories" | "/panier" | "/commandes" | "/profil";
+  to: "/" | "/categories" | "/panier" | "/orders" | "/profil";
   label: string;
   icon: LucideIcon;
 }
@@ -13,7 +13,7 @@ const tabs: Tab[] = [
   { to: "/", label: "Accueil", icon: Home },
   { to: "/categories", label: "Catégories", icon: LayoutGrid },
   { to: "/panier", label: "Panier", icon: ShoppingCart },
-  { to: "/commandes", label: "Commandes", icon: Package },
+  { to: "/orders", label: "Commandes", icon: Package },
   { to: "/profil", label: "Profil", icon: User },
 ];
 

@@ -12,12 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
-import { Route as CommandesRouteImport } from './routes/commandes'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as OrderSuccessRouteImport } from './routes/order-success'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
+import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
+import { Route as CheckoutPaymentRouteImport } from './routes/checkout_.payment'
 import { Route as CategoriesCategoryIdRouteImport } from './routes/categories.$categoryId'
 import { Route as CategoriesCategoryIdSubCategoryIdRouteImport } from './routes/categories.$categoryId.$subCategoryId'
 
@@ -36,9 +39,14 @@ const PanierRoute = PanierRouteImport.update({
   path: '/panier',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CommandesRoute = CommandesRouteImport.update({
-  id: '/commandes',
-  path: '/commandes',
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderSuccessRoute = OrderSuccessRouteImport.update({
+  id: '/order-success',
+  path: '/order-success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -66,6 +74,16 @@ const ProductProductIdRoute = ProductProductIdRouteImport.update({
   path: '/product/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
+  id: '/$orderId',
+  path: '/$orderId',
+  getParentRoute: () => OrdersRoute,
+} as any)
+const CheckoutPaymentRoute = CheckoutPaymentRouteImport.update({
+  id: '/checkout_/payment',
+  path: '/checkout/payment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesCategoryIdRoute = CategoriesCategoryIdRouteImport.update({
   id: '/$categoryId',
   path: '/$categoryId',
@@ -83,11 +101,14 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/checkout/payment': typeof CheckoutPaymentRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
@@ -96,11 +117,14 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/checkout/payment': typeof CheckoutPaymentRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
@@ -110,11 +134,14 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
-  '/commandes': typeof CommandesRoute
+  '/order-success': typeof OrderSuccessRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
   '/categories/$categoryId': typeof CategoriesCategoryIdRouteWithChildren
+  '/checkout_/payment': typeof CheckoutPaymentRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/categories/$categoryId/$subCategoryId': typeof CategoriesCategoryIdSubCategoryIdRoute
 }
@@ -125,11 +152,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
+    | '/order-success'
+    | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
     | '/categories/$categoryId'
+    | '/checkout/payment'
+    | '/orders/$orderId'
     | '/product/$productId'
     | '/categories/$categoryId/$subCategoryId'
   fileRoutesByTo: FileRoutesByTo
@@ -138,11 +168,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
+    | '/order-success'
+    | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
     | '/categories/$categoryId'
+    | '/checkout/payment'
+    | '/orders/$orderId'
     | '/product/$productId'
     | '/categories/$categoryId/$subCategoryId'
   id:
@@ -151,11 +184,14 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
-    | '/commandes'
+    | '/order-success'
+    | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
     | '/categories/$categoryId'
+    | '/checkout_/payment'
+    | '/orders/$orderId'
     | '/product/$productId'
     | '/categories/$categoryId/$subCategoryId'
   fileRoutesById: FileRoutesById
@@ -165,10 +201,12 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
-  CommandesRoute: typeof CommandesRoute
+  OrderSuccessRoute: typeof OrderSuccessRoute
+  OrdersRoute: typeof OrdersRouteWithChildren
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
   SearchRoute: typeof SearchRoute
+  CheckoutPaymentRoute: typeof CheckoutPaymentRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
 }
 
@@ -195,11 +233,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanierRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/commandes': {
-      id: '/commandes'
-      path: '/commandes'
-      fullPath: '/commandes'
-      preLoaderRoute: typeof CommandesRouteImport
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-success': {
+      id: '/order-success'
+      path: '/order-success'
+      fullPath: '/order-success'
+      preLoaderRoute: typeof OrderSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -235,6 +280,20 @@ declare module '@tanstack/react-router' {
       path: '/product/$productId'
       fullPath: '/product/$productId'
       preLoaderRoute: typeof ProductProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders/$orderId': {
+      id: '/orders/$orderId'
+      path: '/$orderId'
+      fullPath: '/orders/$orderId'
+      preLoaderRoute: typeof OrdersOrderIdRouteImport
+      parentRoute: typeof OrdersRoute
+    }
+    '/checkout_/payment': {
+      id: '/checkout_/payment'
+      path: '/checkout/payment'
+      fullPath: '/checkout/payment'
+      preLoaderRoute: typeof CheckoutPaymentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories/$categoryId': {
@@ -278,17 +337,40 @@ const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
   CategoriesRouteChildren,
 )
 
+interface OrdersRouteChildren {
+  OrdersOrderIdRoute: typeof OrdersOrderIdRoute
+}
+
+const OrdersRouteChildren: OrdersRouteChildren = {
+  OrdersOrderIdRoute: OrdersOrderIdRoute,
+}
+
+const OrdersRouteWithChildren =
+  OrdersRoute._addFileChildren(OrdersRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
-  CommandesRoute: CommandesRoute,
+  OrderSuccessRoute: OrderSuccessRoute,
+  OrdersRoute: OrdersRouteWithChildren,
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
   SearchRoute: SearchRoute,
+  CheckoutPaymentRoute: CheckoutPaymentRoute,
   ProductProductIdRoute: ProductProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
