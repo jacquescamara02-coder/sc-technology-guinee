@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ProductCard } from "@/components/ProductCard";
@@ -9,19 +9,25 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-7 px-4 py-4">
       <HeroCarousel />
 
       {/* Catégories populaires */}
       <section>
-        <SectionHeader title="Catégories populaires" action={{ label: "Voir tout" }} />
+        <SectionHeader
+          title="Catégories populaires"
+          action={{ label: "Voir tout", onClick: () => navigate({ to: "/categories" }) }}
+        />
         <div className="grid grid-cols-3 gap-2.5">
           {categories.map((c) => {
             const Icon = c.icon;
             return (
-              <button
+              <Link
                 key={c.id}
+                to="/categories/$categoryId"
+                params={{ categoryId: c.id }}
                 className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-3 transition hover:border-primary/40 hover:-translate-y-0.5"
               >
                 <div className="grid h-12 w-12 place-items-center rounded-xl bg-surface-elevated text-primary transition group-hover:bg-[image:var(--gradient-primary)] group-hover:text-primary-foreground">
@@ -31,15 +37,18 @@ function Index() {
                   <div className="line-clamp-1 text-xs font-semibold text-foreground">{c.name}</div>
                   <div className="text-[10px] text-muted-foreground">{c.count} produits</div>
                 </div>
-              </button>
+              </Link>
             );
           })}
         </div>
       </section>
 
-      {/* Produits en vedette — horizontal scroll */}
+      {/* Produits en vedette */}
       <section>
-        <SectionHeader title="Produits en vedette" action={{ label: "Voir tout" }} />
+        <SectionHeader
+          title="Produits en vedette"
+          action={{ label: "Voir tout", onClick: () => navigate({ to: "/categories" }) }}
+        />
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
           {featured.map((p) => (
             <ProductCard key={p.id} product={p} className="w-44 shrink-0 snap-start" />
@@ -47,9 +56,12 @@ function Index() {
         </div>
       </section>
 
-      {/* Nouveautés — grid */}
+      {/* Nouveautés */}
       <section>
-        <SectionHeader title="Nouveautés" action={{ label: "Voir tout" }} />
+        <SectionHeader
+          title="Nouveautés"
+          action={{ label: "Voir tout", onClick: () => navigate({ to: "/categories" }) }}
+        />
         <div className="grid grid-cols-2 gap-3">
           {newArrivals.map((p) => (
             <ProductCard key={p.id} product={p} />
