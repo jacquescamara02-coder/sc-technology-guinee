@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Save } from "lucide-react";
+import { Save, Facebook, Loader2, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
+import { simulateFacebookTest } from "@/lib/facebook";
 
 export const Route = createFileRoute("/admin/settings")({
   component: SettingsPage,
@@ -12,12 +14,22 @@ function SettingsPage() {
   const { settings, updateSettings } = useAdminData();
   const [s, setS] = useState(settings);
   const [saved, setSaved] = useState(false);
+  const [testing, setTesting] = useState(false);
 
   const save = (e: React.FormEvent) => {
     e.preventDefault();
     updateSettings(s);
     setSaved(true);
+    toast.success("Paramètres enregistrés");
     setTimeout(() => setSaved(false), 2500);
+  };
+
+  const testConnection = async () => {
+    setTesting(true);
+    const ok = await simulateFacebookTest(s.facebookPageId, s.facebookToken);
+    setTesting(false);
+    if (ok) toast.success("Connexion Facebook réussie ✅");
+    else toast.error("Connexion impossible — vérifiez l'ID et le token");
   };
 
   return (
