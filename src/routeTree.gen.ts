@@ -9,11 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VedetteRouteImport } from './routes/vedette'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order-success'
+import { Route as NouveautesRouteImport } from './routes/nouveautes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CartRouteImport } from './routes/cart'
@@ -36,6 +38,11 @@ import { Route as AdminProductsNewRouteImport } from './routes/admin.products.ne
 import { Route as AdminProductsProductIdFacebookPreviewRouteImport } from './routes/admin.products.$productId.facebook-preview'
 import { Route as AdminProductsProductIdEditRouteImport } from './routes/admin.products.$productId.edit'
 
+const VedetteRoute = VedetteRouteImport.update({
+  id: '/vedette',
+  path: '/vedette',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -59,6 +66,11 @@ const OrdersRoute = OrdersRouteImport.update({
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order-success',
   path: '/order-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NouveautesRoute = NouveautesRouteImport.update({
+  id: '/nouveautes',
+  path: '/nouveautes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -176,11 +188,13 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
+  '/nouveautes': typeof NouveautesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/vedette': typeof VedetteRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -203,11 +217,13 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
+  '/nouveautes': typeof NouveautesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/vedette': typeof VedetteRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -232,11 +248,13 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRouteWithChildren
   '/checkout': typeof CheckoutRoute
+  '/nouveautes': typeof NouveautesRoute
   '/order-success': typeof OrderSuccessRoute
   '/orders': typeof OrdersRouteWithChildren
   '/panier': typeof PanierRoute
   '/profil': typeof ProfilRoute
   '/search': typeof SearchRoute
+  '/vedette': typeof VedetteRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/facebook': typeof AdminFacebookRoute
@@ -262,11 +280,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/nouveautes'
     | '/order-success'
     | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
+    | '/vedette'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -289,11 +309,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/nouveautes'
     | '/order-success'
     | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
+    | '/vedette'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -317,11 +339,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/nouveautes'
     | '/order-success'
     | '/orders'
     | '/panier'
     | '/profil'
     | '/search'
+    | '/vedette'
     | '/admin/categories'
     | '/admin/dashboard'
     | '/admin/facebook'
@@ -346,17 +370,26 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
+  NouveautesRoute: typeof NouveautesRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   OrdersRoute: typeof OrdersRouteWithChildren
   PanierRoute: typeof PanierRoute
   ProfilRoute: typeof ProfilRoute
   SearchRoute: typeof SearchRoute
+  VedetteRoute: typeof VedetteRoute
   CheckoutPaymentRoute: typeof CheckoutPaymentRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vedette': {
+      id: '/vedette'
+      path: '/vedette'
+      fullPath: '/vedette'
+      preLoaderRoute: typeof VedetteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -390,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/order-success'
       fullPath: '/order-success'
       preLoaderRoute: typeof OrderSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nouveautes': {
+      id: '/nouveautes'
+      path: '/nouveautes'
+      fullPath: '/nouveautes'
+      preLoaderRoute: typeof NouveautesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -624,11 +664,13 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
+  NouveautesRoute: NouveautesRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   OrdersRoute: OrdersRouteWithChildren,
   PanierRoute: PanierRoute,
   ProfilRoute: ProfilRoute,
   SearchRoute: SearchRoute,
+  VedetteRoute: VedetteRoute,
   CheckoutPaymentRoute: CheckoutPaymentRoute,
   ProductProductIdRoute: ProductProductIdRoute,
 }
