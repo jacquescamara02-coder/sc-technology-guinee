@@ -106,6 +106,7 @@ function RootComponent() {
   if (isAdmin) {
     return (
       <QueryClientProvider client={queryClient}>
+        <ThemeApplier />
         <div className="min-h-screen bg-slate-50 text-slate-900">
           <Outlet />
         </div>
