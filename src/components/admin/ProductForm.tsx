@@ -85,10 +85,15 @@ export function ProductForm({ initial }: Props) {
       alert("Veuillez remplir tous les champs obligatoires");
       return;
     }
+    const isNew = !initial;
     if (initial) {
       updateProduct(p.id, p);
     } else {
       addProduct(p);
+    }
+    const auto = useAdminData.getState().settings.facebookAutoPublish;
+    if (p.publishFacebook || (isNew && auto)) {
+      void simulateFacebookPublish(p);
     }
     navigate({ to: "/admin/products" });
   };
