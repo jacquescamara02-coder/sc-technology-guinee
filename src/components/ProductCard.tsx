@@ -21,7 +21,13 @@ export function ProductCard({ product, className = "" }: { product: Product; cla
     <article
       className={`group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition hover:border-primary/40 hover:-translate-y-0.5 ${className}`}
     >
-      <div className="relative aspect-square overflow-hidden" style={{ backgroundImage: product.image }}>
+      <Link
+        to="/product/$productId"
+        params={{ productId: product.id }}
+        className="relative block aspect-square overflow-hidden"
+        style={{ backgroundImage: product.image }}
+        aria-label={`Voir ${product.name}`}
+      >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
         {product.badge && (
           <span
@@ -43,7 +49,7 @@ export function ProductCard({ product, className = "" }: { product: Product; cla
         >
           {inStock ? `En stock` : "Rupture"}
         </span>
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-2 p-3">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{product.brand}</div>
         <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground">{product.name}</h3>
