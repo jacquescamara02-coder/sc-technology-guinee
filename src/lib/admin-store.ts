@@ -89,6 +89,7 @@ interface AdminDataState {
   products: AdminProduct[];
   categories: AdminCategory[];
   settings: AdminSettings;
+  facebookPosts: FacebookPost[];
   addProduct: (p: AdminProduct) => void;
   updateProduct: (id: string, patch: Partial<AdminProduct>) => void;
   deleteProduct: (id: string) => void;
@@ -101,6 +102,7 @@ interface AdminDataState {
   updateSubcategory: (catId: string, subId: string, name: string) => void;
   deleteSubcategory: (catId: string, subId: string) => void;
   updateSettings: (patch: Partial<AdminSettings>) => void;
+  recordFacebookPost: (post: FacebookPost) => void;
 }
 
 const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
