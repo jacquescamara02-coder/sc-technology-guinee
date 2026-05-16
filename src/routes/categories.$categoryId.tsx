@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, Outlet, useLocation } from "@tanstack/react-router";
 import { categories, getCategory, productsBySub } from "@/lib/data";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ChevronRight } from "lucide-react";
@@ -17,8 +17,11 @@ export const Route = createFileRoute("/categories/$categoryId")({
 
 function SubCategoriesPage() {
   const { categoryId } = Route.useLoaderData();
+  const location = useLocation();
   const cat = categories.find((category) => category.id === categoryId);
   if (!cat) return null;
+  if (location.pathname !== `/categories/${categoryId}`) return <Outlet />;
+
   const Icon = cat.icon;
   return (
     <div className="space-y-4 px-4 py-4">
