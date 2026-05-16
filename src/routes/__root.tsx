@@ -53,10 +53,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#0066FF" },
-      { title: "TechShop CI — Hardware & IT Guinée" },
-      { name: "description", content: "Achetez laptops, écrans, imprimantes et accessoires informatiques en Guinée. Livraison à Conakry." },
-      { property: "og:title", content: "TechShop CI" },
-      { property: "og:description", content: "L'e-commerce tech premium en Guinée." },
+      { title: "SC TECHNOLOGY - Matériel Informatique en Guinée" },
+      { name: "description", content: "SC TECHNOLOGY — Vente de matériel informatique en Guinée. Laptops, écrans, imprimantes, accessoires. Livraison à Conakry et toute la Guinée." },
+      { property: "og:title", content: "SC TECHNOLOGY" },
+      { property: "og:description", content: "Matériel informatique en Guinée — SC TECHNOLOGY." },
       { property: "og:type", content: "website" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
@@ -113,6 +113,7 @@ function RootComponent() {
         <main className="mx-auto max-w-screen-md animate-[fade-in_0.3s_ease-out]">
           <Outlet />
         </main>
+        <Footer />
         <BottomNav />
       </div>
     </QueryClientProvider>
