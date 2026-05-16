@@ -80,6 +80,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/admin");
+  if (isAdmin) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-slate-50 text-slate-900">
+          <Outlet />
+        </div>
+      </QueryClientProvider>
+    );
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <SplashScreen />
