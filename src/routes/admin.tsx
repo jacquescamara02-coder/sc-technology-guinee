@@ -15,11 +15,11 @@ import {
   LogOut,
   Menu,
   X,
-  ShieldCheck,
   Facebook,
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { useAdminAuth } from "@/lib/admin-store";
+import logoUrl from "@/assets/sc-logo.png";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -57,12 +57,10 @@ function AdminLayout() {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex">
       {/* Sidebar desktop */}
       <aside className="hidden md:flex w-64 flex-col bg-white border-r border-slate-200 sticky top-0 h-screen">
-        <div className="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-          <div className="h-9 w-9 rounded-xl bg-blue-600 text-white flex items-center justify-center">
-            <ShieldCheck className="h-5 w-5" />
-          </div>
+        <div className="px-5 py-4 border-b border-slate-200 flex items-center gap-3">
+          <img src={logoUrl} alt="SC TECHNOLOGY" className="h-11 w-11 rounded-xl bg-white border border-slate-200 p-1 object-contain" />
           <div>
-            <p className="text-sm font-bold leading-tight">SC TECHNOLOGY</p>
+            <p className="text-sm font-bold leading-tight text-slate-900">SC TECHNOLOGY</p>
             <p className="text-xs text-slate-500 leading-tight">Administration</p>
           </div>
         </div>
@@ -95,10 +93,8 @@ function AdminLayout() {
           <aside className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl flex flex-col">
             <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
-                  <ShieldCheck className="h-4 w-4" />
-                </div>
-                <p className="text-sm font-bold">SC TECHNOLOGY Admin</p>
+                <img src={logoUrl} alt="SC TECHNOLOGY" className="h-9 w-9 rounded-lg bg-white border border-slate-200 p-0.5 object-contain" />
+                <p className="text-sm font-bold text-slate-900">SC TECHNOLOGY <span className="text-blue-600">Admin</span></p>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1">
                 <X className="h-5 w-5 text-slate-500" />

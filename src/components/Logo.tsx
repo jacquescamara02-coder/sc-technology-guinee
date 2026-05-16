@@ -1,26 +1,27 @@
 import logoUrl from "@/assets/sc-logo.png";
 
-export function Logo({ compact = false }: { compact?: boolean }) {
+export function Logo({
+  compact = false,
+  variant = "dark",
+}: {
+  compact?: boolean;
+  variant?: "dark" | "light";
+}) {
+  // The uploaded logo already contains the "SC TECHNOLOGY" wordmark,
+  // so we display the image alone — no duplicate text next to it.
+  const bg =
+    variant === "light"
+      ? "bg-white"
+      : "bg-white/95 shadow-[var(--shadow-glow)]";
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center">
       <img
         src={logoUrl}
-        alt="SC TECHNOLOGY"
-        width={36}
-        height={36}
-        loading="lazy"
-        className="h-9 w-9 rounded-xl bg-white/95 p-1 shadow-[var(--shadow-glow)] object-contain"
+        alt="SC TECHNOLOGY — Matériel informatique en Guinée"
+        width={compact ? 40 : 48}
+        height={compact ? 40 : 48}
+        className={`${compact ? "h-10 w-10" : "h-12 w-12"} rounded-xl ${bg} p-1 object-contain`}
       />
-      {!compact && (
-        <div className="leading-tight">
-          <div className="text-base font-bold tracking-tight text-foreground">
-            SC <span className="text-primary">TECHNOLOGY</span>
-          </div>
-          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-            Guinée
-          </div>
-        </div>
-      )}
     </div>
   );
 }
