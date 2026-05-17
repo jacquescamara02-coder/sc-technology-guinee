@@ -70,9 +70,15 @@ function BannersPage() {
           <Input label="Sous-titre" value={draft.subtitle} onChange={(v) => setDraft({ ...draft, subtitle: v })} />
           <Input label="Texte du bouton" value={draft.cta} onChange={(v) => setDraft({ ...draft, cta: v })} />
           <Input
+          <Input
             label="Lien (ex: /vedette, /categories/laptops)"
             value={draft.link ?? ""}
             onChange={(v) => setDraft({ ...draft, link: v })}
+          />
+          <Input
+            label="Badge (ex: Offre limitée)"
+            value={draft.badge ?? ""}
+            onChange={(v) => setDraft({ ...draft, badge: v })}
           />
           <div>
             <label className="block text-xs font-medium text-slate-700 mb-1">
