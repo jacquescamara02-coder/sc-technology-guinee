@@ -16,6 +16,7 @@ function BannersPage() {
     title: "",
     subtitle: "",
     cta: "Découvrir",
+    badge: "Offre limitée",
     link: "/vedette",
     hue: 260,
     active: true,
