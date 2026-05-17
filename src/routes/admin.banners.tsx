@@ -28,7 +28,7 @@ function BannersPage() {
       return;
     }
     addHeroSlide(draft);
-    setDraft({ title: "", subtitle: "", cta: "Découvrir", link: "/vedette", hue: 260, active: true });
+    setDraft({ title: "", subtitle: "", cta: "Découvrir", badge: "Offre limitée", link: "/vedette", hue: 260, active: true });
     toast.success("Bannière ajoutée");
   };
 
