@@ -55,6 +55,7 @@ export interface HeroSlide {
   title: string;
   subtitle: string;
   cta: string;
+  badge?: string; // ex: "Offre limitée"
   link?: string; // optional path like /vedette or /categories/laptops
   image?: string; // data URL or http URL
   hue?: number; // fallback gradient
