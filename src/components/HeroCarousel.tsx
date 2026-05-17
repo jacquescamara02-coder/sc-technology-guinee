@@ -39,10 +39,12 @@ export function HeroCarousel() {
                       }
                 }
               >
-                {isImg && <div className="absolute inset-0 bg-black/35" />}
-                <div className="relative inline-flex w-fit items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur">
-                  Offre limitée
-                </div>
+                {isImg && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />}
+                {s.badge && (
+                  <div className="relative inline-flex w-fit items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur">
+                    {s.badge}
+                  </div>
+                )}
                 <div className="relative space-y-1">
                   <h2 className="text-2xl font-bold leading-tight text-white drop-shadow">
                     {s.title}
@@ -51,14 +53,13 @@ export function HeroCarousel() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (s.link) {
-                        if (s.link.startsWith("http")) window.location.assign(s.link);
-                        else navigate({ to: s.link });
-                      }
+                      const target = s.link && s.link.trim() ? s.link : "/vedette";
+                      if (target.startsWith("http")) window.location.assign(target);
+                      else navigate({ to: target });
                     }}
                     className="mt-2 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-primary transition active:scale-95"
                   >
-                    {s.cta} <ChevronRight className="h-3.5 w-3.5" />
+                    {s.cta || "Découvrir"} <ChevronRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
