@@ -169,9 +169,9 @@ const seededCategories: AdminCategory[] = seedCategories.map((c) => ({
 }));
 
 const defaultHeroSlides: HeroSlide[] = [
-  { id: "hero-1", title: "Soldes Tech -30%", subtitle: "Sur tous les laptops MacBook & Dell", cta: "Voir l'offre", link: "/vedette", hue: 260, active: true },
-  { id: "hero-2", title: "Nouveautés 2026", subtitle: "Découvrez les derniers écrans LG & Samsung", cta: "Explorer", link: "/nouveautes", hue: 220, active: true },
-  { id: "hero-3", title: "Livraison gratuite", subtitle: "À Conakry pour toute commande +5M GNF", cta: "En savoir plus", link: "/categories", hue: 200, active: true },
+  { id: "hero-1", title: "Soldes Tech -30%", subtitle: "Sur tous les laptops MacBook & Dell", cta: "Voir l'offre", badge: "Offre limitée", link: "/vedette", hue: 260, active: true, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" },
+  { id: "hero-2", title: "Nouveautés 2026", subtitle: "Découvrez les derniers écrans LG & Samsung", cta: "Explorer", badge: "Nouveau", link: "/nouveautes", hue: 220, active: true, image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=1200&q=80&auto=format&fit=crop" },
+  { id: "hero-3", title: "Livraison gratuite", subtitle: "À Conakry pour toute commande +5M GNF", cta: "En savoir plus", badge: "Avantage", link: "/categories", hue: 200, active: true, image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80&auto=format&fit=crop" },
 ];
 
 const defaultSettings: AdminSettings = {
