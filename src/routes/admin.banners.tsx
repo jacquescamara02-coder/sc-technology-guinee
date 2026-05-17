@@ -131,6 +131,7 @@ function BannersPage() {
                 <Input label="Sous-titre" value={s.subtitle} onChange={(v) => updateHeroSlide(s.id, { subtitle: v })} />
                 <Input label="Texte du bouton" value={s.cta} onChange={(v) => updateHeroSlide(s.id, { cta: v })} />
                 <Input label="Lien" value={s.link ?? ""} onChange={(v) => updateHeroSlide(s.id, { link: v })} />
+                <Input label="Badge" value={s.badge ?? ""} onChange={(v) => updateHeroSlide(s.id, { badge: v })} />
                 <ImageUploader
                   value={s.image}
                   onChange={(img) => updateHeroSlide(s.id, { image: img })}
