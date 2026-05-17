@@ -77,9 +77,12 @@ function CartPage() {
         </div>
       </div>
 
-      <button className="h-12 w-full rounded-2xl bg-[image:var(--gradient-primary)] text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] transition active:scale-[0.98]">
+      <Link
+        to="/checkout"
+        className="flex h-12 w-full items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] transition active:scale-[0.98]"
+      >
         Passer la commande
-      </button>
+      </Link>
     </div>
   );
 }
