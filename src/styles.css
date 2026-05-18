@@ -137,8 +137,8 @@
 .ambient-blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(90px);
+  opacity: 0.7;
   mix-blend-mode: screen;
   will-change: transform;
 }
