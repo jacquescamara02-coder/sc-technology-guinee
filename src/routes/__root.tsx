@@ -16,6 +16,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { SplashScreen } from "@/components/SplashScreen";
 import { Footer } from "@/components/Footer";
 import { ThemeApplier } from "@/components/ThemeApplier";
+import { AmbientBackground } from "@/components/AmbientBackground";
 
 function NotFoundComponent() {
   return (
@@ -117,7 +118,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeApplier />
       <SplashScreen />
-      <div className="min-h-screen bg-background pb-20">
+      <AmbientBackground />
+      <div className="relative z-10 min-h-screen pb-20">
         <TopHeader />
         <main className="mx-auto max-w-screen-md animate-[fade-in_0.3s_ease-out]">
           <Outlet />
