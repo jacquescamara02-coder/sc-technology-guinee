@@ -7,7 +7,7 @@ export function Logo({
   compact?: boolean;
   variant?: "dark" | "light";
 }) {
-  // The uploaded logo already contains the "SC TECHNOLOGY" wordmark,
+  // The uploaded logo already contains the "SC TECHNOLOGIE" wordmark,
   // so we display the image alone — no duplicate text next to it.
   const bg =
     variant === "light"
@@ -17,7 +17,7 @@ export function Logo({
     <div className="flex items-center">
       <img
         src={logoUrl}
-        alt="SC TECHNOLOGY — Matériel informatique en Guinée"
+        alt="SC TECHNOLOGIE — Matériel informatique en Guinée"
         width={compact ? 40 : 48}
         height={compact ? 40 : 48}
         className={`${compact ? "h-10 w-10" : "h-12 w-12"} rounded-xl ${bg} p-1 object-contain`}

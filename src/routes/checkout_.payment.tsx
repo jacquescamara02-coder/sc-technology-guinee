@@ -19,6 +19,7 @@ import {
   type PaymentMethod,
   type Order,
 } from "@/lib/orders-store";
+import orangeMoneyQr from "@/assets/orange-money-qr.jpeg";
 
 export const Route = createFileRoute("/checkout_/payment")({
   component: PaymentPage,
@@ -219,14 +220,48 @@ function PaymentPage() {
                 <div>
                   <div className="text-sm font-bold text-foreground">Orange Money</div>
                   <div className="text-[11px] text-muted-foreground">
-                    Paiement validé sur votre téléphone
+                    Scannez le QR code ou envoyez au numéro ci-dessous
+                  </div>
+                </div>
+              </div>
+
+              {/* QR + merchant number */}
+              <div className="grid gap-3 rounded-2xl border border-[#FF6600]/30 bg-gradient-to-br from-[#FF6600]/10 to-transparent p-3 sm:grid-cols-[auto_1fr] sm:items-center">
+                <div className="mx-auto rounded-xl bg-white p-2 shadow-md">
+                  <img
+                    src={orangeMoneyQr}
+                    alt="QR Code Orange Money SC TECHNOLOGIE"
+                    className="h-32 w-32 object-contain"
+                  />
+                </div>
+                <div className="space-y-2 text-center sm:text-left">
+                  <div>
+                    <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      Marchand
+                    </div>
+                    <div className="text-sm font-bold text-foreground">SC TECHNOLOGIE</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      Numéro Orange Money
+                    </div>
+                    <a
+                      href="tel:+224610953838"
+                      className="text-xl font-black tracking-wide text-[#FF6600]"
+                    >
+                      610-95-38-38
+                    </a>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    Montant à envoyer :{" "}
+                    <span className="font-bold text-foreground">{formatGNF(total)} GNF</span>
                   </div>
                 </div>
               </div>
 
               <label className="block">
                 <span className="mb-1 block text-xs font-semibold text-foreground">
-                  Numéro Orange Money
+                  Votre numéro Orange Money (pour confirmation)
                 </span>
                 <input
                   value={omPhone}
@@ -243,15 +278,12 @@ function PaymentPage() {
                 )}
               </label>
 
-              <div className="rounded-xl border border-[#FF6600]/30 bg-[#FF6600]/10 p-3 text-[12px] text-foreground">
-                Vous recevrez une demande de confirmation sur votre téléphone Orange.
-              </div>
-
               <ol className="space-y-2 text-xs text-muted-foreground">
                 {[
-                  "Entrez votre numéro Orange Money",
-                  "Validez la demande sur votre téléphone",
-                  "Commande confirmée automatiquement",
+                  "Scannez le QR ou composez #144# sur votre Orange",
+                  "Envoyez le montant au 610-95-38-38",
+                  "Confirmez la transaction avec votre code secret",
+                  "Votre commande sera validée automatiquement",
                 ].map((step, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#FF6600] text-[10px] font-bold text-white">

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook, Star, Sparkles } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook, Star, Sparkles, ImagePlus } from "lucide-react";
+import { toast } from "sonner";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
 
@@ -181,10 +182,7 @@ function ProductsPage() {
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-3">
-                      <div
-                        className="h-9 w-9 rounded-md flex-shrink-0"
-                        style={{ background: p.images[0] }}
-                      />
+                      <ProductThumb product={p} onUpload={(url) => updateProduct(p.id, { images: [url, ...p.images.filter((i) => !i.startsWith("linear-gradient"))] })} />
                       <div className="min-w-0">
                         <p className="font-medium truncate flex items-center gap-1.5">
                           {p.name}
@@ -311,6 +309,60 @@ function ProductsPage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ProductThumb({
+  product,
+  onUpload,
+}: {
+  product: { id: string; name: string; images: string[] };
+  onUpload: (url: string) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const first = product.images[0];
+  const isImg = first && (first.startsWith("data:") || first.startsWith("http"));
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Veuillez choisir une image");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      onUpload(reader.result as string);
+      toast.success("Image ajoutée");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="relative h-10 w-10 flex-shrink-0">
+      {isImg ? (
+        <img src={first} alt={product.name} className="h-10 w-10 rounded-md object-cover border border-slate-200" />
+      ) : (
+        <div className="h-10 w-10 rounded-md border border-slate-200" style={{ background: first ?? "#e2e8f0" }} />
+      )}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          ref.current?.click();
+        }}
+        title={isImg ? "Remplacer l'image" : "Ajouter une image"}
+        className="absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-blue-600 text-white shadow ring-2 ring-white hover:bg-blue-700"
+      >
+        <ImagePlus className="h-3 w-3" />
+      </button>
+      <input
+        ref={ref}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
     </div>
   );
 }

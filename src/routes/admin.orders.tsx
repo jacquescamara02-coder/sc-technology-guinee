@@ -168,7 +168,7 @@ function OrderDetailModal({
       .join("");
     w.document.write(`<!doctype html><html><head><title>Facture ${order.id}</title>
       <style>body{font-family:system-ui;padding:32px;color:#0f172a}h1{margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-top:16px}th,td{padding:8px;border-bottom:1px solid #e2e8f0;text-align:left}th{background:#f8fafc}.tot{font-weight:700;font-size:18px;margin-top:24px;text-align:right}</style></head><body>
-      <h1>SC TECHNOLOGY</h1><p>Facture <strong>${order.id}</strong> — ${formatDate(order.createdAt)}</p>
+      <h1>SC TECHNOLOGIE</h1><p>Facture <strong>${order.id}</strong> — ${formatDate(order.createdAt)}</p>
       <p><strong>Client:</strong> ${order.delivery.fullName}<br/><strong>Téléphone:</strong> ${order.delivery.phone}<br/><strong>Adresse:</strong> ${order.delivery.address}, ${order.delivery.district}, ${order.delivery.city}</p>
       <table><thead><tr><th>Produit</th><th>Qté</th><th style="text-align:right">PU</th><th style="text-align:right">Total</th></tr></thead><tbody>${itemsHtml}</tbody></table>
       <p class="tot">Sous-total : ${formatGNF(order.subtotal)}<br/>TVA : ${formatGNF(order.tva)}<br/>Total TTC : ${formatGNF(order.total)}</p>

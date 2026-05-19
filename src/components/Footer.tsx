@@ -8,7 +8,7 @@ export function Footer() {
         <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary/90">
           Bientôt disponible
         </div>
-        <div className="mt-1 text-base font-bold text-foreground">SC TECHNOLOGY</div>
+        <div className="mt-1 text-base font-bold text-foreground">SC TECHNOLOGIE</div>
         <p className="mt-1 text-[11px] text-muted-foreground">
           Téléchargez l'application mobile officielle
         </p>
@@ -19,7 +19,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border/60 pt-5">
-        <div className="font-semibold text-foreground">SC TECHNOLOGY</div>
+        <div className="font-semibold text-foreground">SC TECHNOLOGIE</div>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           <a href="tel:+224620212045" className="inline-flex items-center gap-1.5 hover:text-foreground">
             <Phone className="h-3.5 w-3.5 text-primary" /> 620-21-20-45
@@ -36,7 +36,7 @@ export function Footer() {
             <MessageCircle className="h-3.5 w-3.5 text-[#25D366]" /> WhatsApp : 620-21-20-45
           </a>
         </div>
-        <div className="mt-3 text-[11px]">© {new Date().getFullYear()} SC TECHNOLOGY • Guinée</div>
+        <div className="mt-3 text-[11px]">© {new Date().getFullYear()} SC TECHNOLOGIE • Guinée</div>
       </div>
     </footer>
   );

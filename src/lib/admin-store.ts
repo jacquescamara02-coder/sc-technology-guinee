@@ -151,7 +151,7 @@ const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
   oldPrice: p.oldPrice,
   stock: p.stock,
   sku: p.id.toUpperCase(),
-  description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGY.`,
+  description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGIE.`,
   specs: p.specs.split("•").map((s, i) => ({ key: `Spécification ${i + 1}`, value: s.trim() })),
   images: [p.image],
   active: true,
@@ -171,18 +171,18 @@ const seededCategories: AdminCategory[] = seedCategories.map((c) => ({
 const defaultHeroSlides: HeroSlide[] = [
   { id: "hero-1", title: "Soldes Tech -30%", subtitle: "Sur tous les laptops MacBook & Dell", cta: "Voir l'offre", badge: "Offre limitée", link: "/vedette", hue: 260, active: true, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1200&q=80&auto=format&fit=crop" },
   { id: "hero-2", title: "Nouveautés 2026", subtitle: "Découvrez les derniers écrans LG & Samsung", cta: "Explorer", badge: "Nouveau", link: "/nouveautes", hue: 220, active: true, image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=1200&q=80&auto=format&fit=crop" },
-  { id: "hero-3", title: "Livraison gratuite", subtitle: "À Conakry pour toute commande +5M GNF", cta: "En savoir plus", badge: "Avantage", link: "/categories", hue: 200, active: true, image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80&auto=format&fit=crop" },
+  { id: "hero-3", title: "Livraison au compte du client", subtitle: "Partout en Guinée — frais à la charge du client", cta: "En savoir plus", badge: "Info", link: "/categories", hue: 200, active: true, image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80&auto=format&fit=crop" },
 ];
 
 const defaultSettings: AdminSettings = {
-  storeName: "SC TECHNOLOGY",
+  storeName: "SC TECHNOLOGIE",
   appTagline: "Matériel informatique en Guinée",
   logo: undefined,
   contactEmail: "contact@sctechnology.gn",
   contactPhone: "+224 620-21-20-45",
   whatsapp: "+224 620-21-20-45",
   address: "Conakry, Guinée",
-  facebookUrl: "",
+  facebookUrl: "https://fb.me/8TeLA81zv",
   instagramUrl: "",
   tiktokUrl: "",
   deliveryFees: [
@@ -363,14 +363,13 @@ export const useAdminData = create<AdminDataState>()(
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? window.localStorage : (undefined as never),
       ),
-      version: 3,
+      version: 4,
       migrate: (persisted: unknown, version: number) => {
         const data = (persisted ?? {}) as Partial<AdminDataState>;
         if (version < 2) {
           data.settings = { ...defaultSettings, ...(data.settings ?? {}) };
         }
         if (version < 3) {
-          // Ensure new fields exist
           data.settings = {
             ...defaultSettings,
             ...(data.settings ?? {}),
@@ -380,6 +379,17 @@ export const useAdminData = create<AdminDataState>()(
             iconKey: c.id,
             ...c,
           }));
+        }
+        if (version < 4) {
+          // Refresh brand name, hero slides and Facebook URL to new defaults
+          data.settings = {
+            ...(data.settings ?? defaultSettings),
+            storeName: "SC TECHNOLOGIE",
+            facebookUrl: data.settings?.facebookUrl?.includes("fb.me/8TeLA81zv")
+              ? data.settings.facebookUrl
+              : "https://fb.me/8TeLA81zv",
+            heroSlides: defaultHeroSlides,
+          };
         }
         return data as AdminDataState;
       },

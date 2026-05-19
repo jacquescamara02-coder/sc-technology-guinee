@@ -74,7 +74,7 @@ function ProductDetailPage() {
     ...adminProduct.specs
       .filter((s) => s.key || s.value)
       .map((s) => ({ label: s.key || "Spécification", value: s.value })),
-    { label: "Garantie", value: "12 mois constructeur" },
+    { label: "Marque", value: adminProduct.brand || "—" },
     {
       label: "Disponibilité",
       value: product.stock > 0 ? `${product.stock} en stock` : "Rupture de stock",
@@ -83,7 +83,7 @@ function ProductDetailPage() {
 
   const description =
     adminProduct.description?.trim() ||
-    "Produit de qualité disponible chez SC TECHNOLOGY. Livraison sur Conakry et toute la Guinée. Paiement à la livraison disponible.";
+    "Produit de qualité disponible chez SC TECHNOLOGIE. Livraison sur Conakry et toute la Guinée. Paiement à la livraison disponible.";
 
   const scrollTo = (i: number) => {
     setActiveImg(i);
@@ -311,8 +311,8 @@ function ProductDetailPage() {
           <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-3">
             <Shield className="h-5 w-5 text-primary" />
             <div>
-              <div className="text-xs font-semibold text-foreground">Garantie 12 mois</div>
-              <div className="text-[10px] text-muted-foreground">Constructeur</div>
+              <div className="text-xs font-semibold text-foreground">Produit authentique</div>
+              <div className="text-[10px] text-muted-foreground">Importation directe</div>
             </div>
           </div>
         </div>
