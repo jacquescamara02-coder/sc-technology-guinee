@@ -151,7 +151,7 @@ const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
   oldPrice: p.oldPrice,
   stock: p.stock,
   sku: p.id.toUpperCase(),
-  description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGY.`,
+  description: `${p.name} — ${p.specs}. Produit disponible chez SC TECHNOLOGIE.`,
   specs: p.specs.split("•").map((s, i) => ({ key: `Spécification ${i + 1}`, value: s.trim() })),
   images: [p.image],
   active: true,
@@ -175,7 +175,7 @@ const defaultHeroSlides: HeroSlide[] = [
 ];
 
 const defaultSettings: AdminSettings = {
-  storeName: "SC TECHNOLOGY",
+  storeName: "SC TECHNOLOGIE",
   appTagline: "Matériel informatique en Guinée",
   logo: undefined,
   contactEmail: "contact@sctechnology.gn",

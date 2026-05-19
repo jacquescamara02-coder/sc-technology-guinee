@@ -75,7 +75,7 @@ function ProfilePage() {
         <LogOut className="h-4 w-4" /> Se déconnecter
       </button>
 
-      <p className="pb-4 text-center text-[11px] text-muted-foreground">SC TECHNOLOGY • v1.0.0</p>
+      <p className="pb-4 text-center text-[11px] text-muted-foreground">SC TECHNOLOGIE • v1.0.0</p>
     </div>
   );
 }

@@ -140,7 +140,7 @@ function OrderSuccessPage() {
 
       <p className="pt-2 text-center text-xs text-muted-foreground">
         Merci de votre confiance.<br />
-        <span className="font-semibold text-foreground">L'équipe SC TECHNOLOGY</span>
+        <span className="font-semibold text-foreground">L'équipe SC TECHNOLOGIE</span>
       </p>
     </div>
   );

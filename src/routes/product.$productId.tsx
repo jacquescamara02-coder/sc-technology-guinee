@@ -83,7 +83,7 @@ function ProductDetailPage() {
 
   const description =
     adminProduct.description?.trim() ||
-    "Produit de qualité disponible chez SC TECHNOLOGY. Livraison sur Conakry et toute la Guinée. Paiement à la livraison disponible.";
+    "Produit de qualité disponible chez SC TECHNOLOGIE. Livraison sur Conakry et toute la Guinée. Paiement à la livraison disponible.";
 
   const scrollTo = (i: number) => {
     setActiveImg(i);

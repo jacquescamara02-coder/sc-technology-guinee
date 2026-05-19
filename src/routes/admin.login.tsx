@@ -36,11 +36,11 @@ function AdminLoginPage() {
           <div className="inline-flex items-center justify-center h-24 w-24 rounded-3xl bg-white shadow-xl shadow-blue-600/10 border border-slate-200 mb-5 p-2">
             <img
               src={logoUrl}
-              alt="SC TECHNOLOGY"
+              alt="SC TECHNOLOGIE"
               className="h-full w-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SC TECHNOLOGY <span className="text-blue-600">Admin</span></h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SC TECHNOLOGIE <span className="text-blue-600">Admin</span></h1>
           <p className="text-sm text-slate-500 mt-1.5">Espace réservé à l'administration</p>
         </div>
 
