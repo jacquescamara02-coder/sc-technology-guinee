@@ -312,3 +312,57 @@ function ProductsPage() {
     </div>
   );
 }
+
+function ProductThumb({
+  product,
+  onUpload,
+}: {
+  product: { id: string; name: string; images: string[] };
+  onUpload: (url: string) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const first = product.images[0];
+  const isImg = first && (first.startsWith("data:") || first.startsWith("http"));
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Veuillez choisir une image");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      onUpload(reader.result as string);
+      toast.success("Image ajoutée");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="relative h-10 w-10 flex-shrink-0">
+      {isImg ? (
+        <img src={first} alt={product.name} className="h-10 w-10 rounded-md object-cover border border-slate-200" />
+      ) : (
+        <div className="h-10 w-10 rounded-md border border-slate-200" style={{ background: first ?? "#e2e8f0" }} />
+      )}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          ref.current?.click();
+        }}
+        title={isImg ? "Remplacer l'image" : "Ajouter une image"}
+        className="absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center rounded-full bg-blue-600 text-white shadow ring-2 ring-white hover:bg-blue-700"
+      >
+        <ImagePlus className="h-3 w-3" />
+      </button>
+      <input
+        ref={ref}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
+    </div>
+  );
+}
