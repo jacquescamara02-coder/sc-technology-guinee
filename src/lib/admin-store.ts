@@ -363,14 +363,13 @@ export const useAdminData = create<AdminDataState>()(
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? window.localStorage : (undefined as never),
       ),
-      version: 3,
+      version: 4,
       migrate: (persisted: unknown, version: number) => {
         const data = (persisted ?? {}) as Partial<AdminDataState>;
         if (version < 2) {
           data.settings = { ...defaultSettings, ...(data.settings ?? {}) };
         }
         if (version < 3) {
-          // Ensure new fields exist
           data.settings = {
             ...defaultSettings,
             ...(data.settings ?? {}),
@@ -380,6 +379,17 @@ export const useAdminData = create<AdminDataState>()(
             iconKey: c.id,
             ...c,
           }));
+        }
+        if (version < 4) {
+          // Refresh brand name, hero slides and Facebook URL to new defaults
+          data.settings = {
+            ...(data.settings ?? defaultSettings),
+            storeName: "SC TECHNOLOGIE",
+            facebookUrl: data.settings?.facebookUrl?.includes("fb.me/8TeLA81zv")
+              ? data.settings.facebookUrl
+              : "https://fb.me/8TeLA81zv",
+            heroSlides: defaultHeroSlides,
+          };
         }
         return data as AdminDataState;
       },

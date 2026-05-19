@@ -311,8 +311,8 @@ function ProductDetailPage() {
           <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-3">
             <Shield className="h-5 w-5 text-primary" />
             <div>
-              <div className="text-xs font-semibold text-foreground">Garantie 12 mois</div>
-              <div className="text-[10px] text-muted-foreground">Constructeur</div>
+              <div className="text-xs font-semibold text-foreground">Produit authentique</div>
+              <div className="text-[10px] text-muted-foreground">Importation directe</div>
             </div>
           </div>
         </div>
