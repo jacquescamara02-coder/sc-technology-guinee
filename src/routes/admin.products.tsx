@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook, Star, Sparkles } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Plus, Search, Trash2, CheckCircle2, XCircle, Pencil, Facebook, Star, Sparkles, ImagePlus } from "lucide-react";
+import { toast } from "sonner";
 import { useAdminData } from "@/lib/admin-store";
 import { formatGNF } from "@/lib/data";
 
@@ -181,10 +182,7 @@ function ProductsPage() {
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-3">
-                      <div
-                        className="h-9 w-9 rounded-md flex-shrink-0"
-                        style={{ background: p.images[0] }}
-                      />
+                      <ProductThumb product={p} onUpload={(url) => updateProduct(p.id, { images: [url, ...p.images.filter((i) => !i.startsWith("linear-gradient"))] })} />
                       <div className="min-w-0">
                         <p className="font-medium truncate flex items-center gap-1.5">
                           {p.name}
