@@ -19,6 +19,7 @@ import {
   type PaymentMethod,
   type Order,
 } from "@/lib/orders-store";
+import orangeMoneyQr from "@/assets/orange-money-qr.jpeg";
 
 export const Route = createFileRoute("/checkout_/payment")({
   component: PaymentPage,
