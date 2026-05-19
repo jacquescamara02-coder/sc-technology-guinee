@@ -87,7 +87,7 @@ function ManualInvoicePage() {
       address: customer.address,
       district: customer.district,
       city: customer.city,
-      note: "Facture manuelle",
+      notes: "Facture manuelle",
     },
     payment: { method: "card", label: paymentLabel, masked: "—" },
   });
