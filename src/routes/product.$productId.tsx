@@ -74,7 +74,7 @@ function ProductDetailPage() {
     ...adminProduct.specs
       .filter((s) => s.key || s.value)
       .map((s) => ({ label: s.key || "Spécification", value: s.value })),
-    { label: "Garantie", value: "12 mois constructeur" },
+    { label: "Marque", value: adminProduct.brand || "—" },
     {
       label: "Disponibilité",
       value: product.stock > 0 ? `${product.stock} en stock` : "Rupture de stock",

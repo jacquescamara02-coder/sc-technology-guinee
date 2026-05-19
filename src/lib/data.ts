@@ -398,7 +398,7 @@ export const productSpecs = (p: Product): SpecRow[] => {
   };
   const labels = labelsByCat[p.category] ?? ["Spécification 1", "Spécification 2", "Spécification 3"];
   parts.forEach((val, i) => rows.push({ label: labels[i] ?? `Détail ${i + 1}`, value: val }));
-  rows.push({ label: "Garantie", value: "12 mois constructeur" });
+  
   rows.push({ label: "Disponibilité", value: p.stock > 0 ? `${p.stock} en stock` : "Rupture de stock" });
   return rows;
 };
