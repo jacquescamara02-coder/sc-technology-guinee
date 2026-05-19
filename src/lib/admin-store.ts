@@ -16,7 +16,7 @@ export interface AdminProduct {
   sku: string;
   description: string;
   specs: { key: string; value: string }[];
-  images: string[]; // data URLs, http URLs, or gradient strings
+  images: string[];
   active: boolean;
   featured?: boolean;
   isNew?: boolean;
@@ -41,7 +41,7 @@ export interface FacebookPost {
 export interface AdminCategory {
   id: string;
   name: string;
-  iconKey?: string; // see icon-map.ts
+  iconKey?: string;
   subcategories: { id: string; name: string }[];
 }
 
@@ -55,17 +55,17 @@ export interface HeroSlide {
   title: string;
   subtitle: string;
   cta: string;
-  badge?: string; // ex: "Offre limitée"
-  link?: string; // optional path like /vedette or /categories/laptops
-  image?: string; // data URL or http URL
-  hue?: number; // fallback gradient
+  badge?: string;
+  link?: string;
+  image?: string;
+  hue?: number;
   active: boolean;
 }
 
 export interface AdminSettings {
   storeName: string;
   appTagline: string;
-  logo?: string; // data URL or http URL (overrides bundled asset)
+  logo?: string;
   contactEmail: string;
   contactPhone: string;
   whatsapp: string;
@@ -75,7 +75,7 @@ export interface AdminSettings {
   tiktokUrl: string;
   deliveryFees: DeliveryFee[];
   freeShippingThreshold: number;
-  vatRate: number; // 0..1
+  vatRate: number;
   facebookPageId: string;
   facebookToken: string;
   facebookAutoPublish: boolean;
@@ -93,6 +93,26 @@ interface AdminAuth {
 export const ADMIN_EMAIL = "admin@techshopgn.com";
 const ADMIN_PASSWORD = "Admin2024!";
 
+function safeStorage() {
+  if (typeof window === "undefined") return undefined as never;
+  try {
+    window.localStorage.setItem("__test__", "1");
+    window.localStorage.removeItem("__test__");
+    return window.localStorage;
+  } catch {
+    return window.sessionStorage;
+  }
+}
+
+function slug(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 export const useAdminAuth = create<AdminAuth>()(
   persist(
     (set) => ({
@@ -109,9 +129,7 @@ export const useAdminAuth = create<AdminAuth>()(
     }),
     {
       name: "techshop-admin-auth",
-      storage: createJSONStorage(() =>
-        typeof window !== "undefined" ? window.localStorage : (undefined as never),
-      ),
+      storage: createJSONStorage(() => safeStorage()),
     },
   ),
 );
@@ -164,7 +182,7 @@ const seededProducts: AdminProduct[] = seedProducts.map((p) => ({
 const seededCategories: AdminCategory[] = seedCategories.map((c) => ({
   id: c.id,
   name: c.name,
-  iconKey: c.id, // reuse id as default key
+  iconKey: c.id,
   subcategories: c.subcategories.map((s) => ({ id: s.id, name: s.name })),
 }));
 
@@ -206,15 +224,6 @@ const defaultSettings: AdminSettings = {
   heroSlides: defaultHeroSlides,
 };
 
-function slug(s: string) {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
 export const useAdminData = create<AdminDataState>()(
   persist(
     (set) => ({
@@ -246,7 +255,7 @@ export const useAdminData = create<AdminDataState>()(
         set((s) => ({
           categories: [
             ...s.categories,
-            { id: slug(name) || `cat-${Date.now()}`, name, iconKey, subcategories: [] },
+            { id: `${slug(name) || "cat"}-${Date.now()}`, name, iconKey, subcategories: [] },
           ],
         })),
       updateCategory: (id, patch) =>
@@ -263,7 +272,7 @@ export const useAdminData = create<AdminDataState>()(
                   ...c,
                   subcategories: [
                     ...c.subcategories,
-                    { id: slug(name) || `sub-${Date.now()}`, name },
+                    { id: `${slug(name) || "sub"}-${Date.now()}`, name },
                   ],
                 }
               : c,
@@ -360,9 +369,7 @@ export const useAdminData = create<AdminDataState>()(
     }),
     {
       name: "techshop-admin-data",
-      storage: createJSONStorage(() =>
-        typeof window !== "undefined" ? window.localStorage : (undefined as never),
-      ),
+      storage: createJSONStorage(() => safeStorage()),
       version: 4,
       migrate: (persisted: unknown, version: number) => {
         const data = (persisted ?? {}) as Partial<AdminDataState>;
@@ -381,7 +388,6 @@ export const useAdminData = create<AdminDataState>()(
           }));
         }
         if (version < 4) {
-          // Refresh brand name, hero slides and Facebook URL to new defaults
           data.settings = {
             ...(data.settings ?? defaultSettings),
             storeName: "SC TECHNOLOGIE",
